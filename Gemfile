@@ -52,7 +52,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # Read Excel files
-gem "roo", "~> 2.10"
+gem "roo", "~> 3.0"
 gem "csv", "~> 3.3"
 
 # PDF generation
