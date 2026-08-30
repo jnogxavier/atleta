@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Run database migrations before deploying the new version
+echo "Running database migrations on the current container..."
+kamal app exec --reuse "bin/rails db:migrate" || echo "Warning: Migration failed or no existing container"

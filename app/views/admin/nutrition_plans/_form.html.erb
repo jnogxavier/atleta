@@ -1,0 +1,188 @@
+<template id="food-template">
+  <div class="food-item bg-gray-50 p-3 rounded border border-gray-200" data-controller="nutritional-calculator">
+
+    <div class="flex gap-2 mb-1">
+      <div class="flex-1">
+        <span class="text-xs font-medium text-gray-700">Alimento (TACO)</span>
+      </div>
+      <div class="w-24">
+        <span class="text-xs font-medium text-gray-700">Quantidade (g)</span>
+      </div>
+      <div class="w-20">
+        <span class="text-xs font-medium text-gray-700">Calorias</span>
+      </div>
+      <div class="w-20">
+        <span class="text-xs font-medium text-gray-700">Prot (g)</span>
+      </div>
+      <div class="w-20">
+        <span class="text-xs font-medium text-gray-700">Carb (g)</span>
+      </div>
+      <div class="w-20">
+        <span class="text-xs font-medium text-gray-700">Gord (g)</span>
+      </div>
+      <div class="w-10"></div>
+    </div>
+
+
+    <div class="flex gap-2 items-center">
+      <div class="flex-1 relative" data-controller="food-search">
+        
+        <select name=""
+                class="hidden food-select"
+                data-nutritional-calculator-target="foodSelect"
+                data-action="change->nutritional-calculator#calculate"
+                data-food-search-target="hiddenSelect">
+          <option value="">Selecione um alimento</option>
+        </select>
+
+        
+        <input
+          type="text"
+          placeholder="Digite para buscar alimento..."
+          class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+          autocomplete="off"
+          data-food-search-target="searchInput"
+          data-action="input->food-search#search focus->food-search#showAll"
+        >
+
+
+        <div data-food-search-target="searchResults"
+             class="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-48 overflow-y-auto hidden top-full left-0"></div>
+      </div>
+      <div class="w-24">
+        <input type="number"
+               step="0.01"
+               name=""
+               placeholder="Ex: 150"
+               class="w-full px-3 py-2 border border-gray-300 rounded text-sm quantity-input"
+               data-nutritional-calculator-target="quantityInput"
+               data-action="input->nutritional-calculator#calculate">
+      </div>
+      <div class="w-20">
+        <input type="text" readonly
+               data-nutritional-calculator-target="energyDisplay"
+               class="calculated-energy w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+               placeholder="-">
+      </div>
+      <div class="w-20">
+        <input type="text" readonly
+               data-nutritional-calculator-target="proteinDisplay"
+               class="calculated-protein w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+               placeholder="-">
+      </div>
+      <div class="w-20">
+        <input type="text" readonly
+               data-nutritional-calculator-target="carbsDisplay"
+               class="calculated-carbs w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+               placeholder="-">
+      </div>
+      <div class="w-20">
+        <input type="text" readonly
+               data-nutritional-calculator-target="fatDisplay"
+               class="calculated-fat w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+               placeholder="-">
+      </div>
+      <button type="button"
+              data-action="click->nutrition-plan-form#removeFood"
+              class="remove-food-btn w-10 h-10 bg-red-500 text-white rounded hover:bg-red-600 text-sm font-medium flex items-center justify-center">
+        ×
+      </button>
+    </div>
+  </div>
+</template>
+
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+     id="nutrition-plan-form"
+     data-controller="nutrition-plan-form"
+     data-nutrition-plan-form-meal-index-value="<%= nutrition_plan.meals.size %>"
+     data-nutrition-plan-form-foods-value="<%= @foods.to_json(only: [:id, :name, :category, :energy_kcal, :protein_g, :carbohydrate_g, :fat_g]) %>">
+  <%= form_with(model: [:admin, nutrition_plan], local: true) do |f| %>
+    <% if nutrition_plan.errors.any? %>
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+        <h3 class="text-sm font-medium text-red-800 mb-2"><%= pluralize(nutrition_plan.errors.count, "erro") %> impedem que este plano seja salvo:</h3>
+        <ul class="list-disc list-inside text-sm text-red-700">
+          <% format_nutrition_plan_errors(nutrition_plan).each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="relative" data-controller="nutrition-student-search">
+        <label for="nutrition_student_search_input" class="block text-sm font-medium text-gray-700 mb-2">Aluno *</label>
+        <%= f.hidden_field :student_profile_id, data: { nutrition_student_search_target: "selectedIdInput" } %>
+
+        <% if nutrition_plan.persisted? %>
+
+          <div class="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-lg text-gray-700">
+            <%= nutrition_plan.student_profile.name %>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">O aluno não pode ser alterado ao editar um plano</p>
+        <% else %>
+
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Digite para buscar um aluno..."
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              autocomplete="off"
+              data-nutrition-student-search-target="searchInput"
+              data-action="input->nutrition-student-search#search focus->nutrition-student-search#showAll"
+              <% if nutrition_plan.student_name.present? %>value="<%= nutrition_plan.student_name %>"<% end %>
+            >
+            <button type="button"
+                    data-nutrition-student-search-target="clearButton"
+                    data-action="click->nutrition-student-search#clear"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 <% if nutrition_plan.student_name.blank? %>hidden<% end %>">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div data-nutrition-student-search-target="searchResults"
+               class="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-48 overflow-y-auto hidden"></div>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label :name, "Nome do Plano", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :name, placeholder: "Ex: Plano de Ganho de Massa", class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent", required: true %>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :description, "Descrição", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= f.text_area :description, rows: 3, placeholder: "Descreva os objetivos e orientações gerais do plano...", class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" %>
+    </div>
+
+    
+    <div class="border-t border-gray-200 pt-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Refeições</h3>
+        <button type="button"
+                data-action="click->nutrition-plan-form#addMeal"
+                class="px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-all flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Criar Refeição
+        </button>
+      </div>
+
+      <div data-nutrition-plan-form-target="mealsContainer" class="space-y-6">
+        <%= f.fields_for :meals do |meal_form| %>
+          <%= render 'meal_fields', f: meal_form %>
+        <% end %>
+      </div>
+    </div>
+
+    
+    <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-200">
+      <%= link_to "Cancelar", admin_dashboard_path, class: "px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors" %>
+      <%= f.submit nutrition_plan.new_record? ? "Criar Plano Nutricional" : "Atualizar Plano Nutricional", class: "px-6 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,70 @@
+<%
+  # Usage:
+  # <%= render 'shared/searchable_select',
+  #     form: form,
+  #     field_name: :student_profile_id,
+  #     label: 'Selecionar Aluno',
+  #     options: @students,
+  #     value_method: :id,
+  #     text_method: :name,
+  #     prompt: 'Escolha um aluno...',
+  #     selected: @training.student_profile_id,
+  #     required: true
+  # %>
+
+  options ||= []
+  value_method ||= :id
+  text_method ||= :name
+  prompt ||= 'Selecione...'
+  selected ||= nil
+  required ||= false
+  css_class ||= ''
+
+  selected_option = options.find { |opt| opt.send(value_method).to_s == selected.to_s }
+  initial_text = selected_option ? selected_option.send(text_method) : ''
+%>
+
+<div data-controller="searchable-select" class="relative <%= css_class %>">
+  <%= form.label field_name, label, class: "block text-sm font-medium text-gray-700 mb-1" if defined?(label) && label %>
+
+  
+  <div class="relative">
+    <input type="text"
+           data-searchable-select-target="input"
+           data-action="input->searchable-select#filter keydown->searchable-select#handleKeydown focus->searchable-select#focusInput"
+           placeholder="<%= prompt %>"
+           value="<%= initial_text %>"
+           class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+           autocomplete="off">
+    <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </div>
+
+  
+  <%= form.hidden_field field_name,
+      value: selected,
+      data: { searchable_select_target: "hiddenField" },
+      required: required %>
+
+  
+  <div data-searchable-select-target="dropdown"
+       class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+    <% if prompt.present? %>
+      <div data-searchable-select-target="option"
+           data-value=""
+           data-action="click->searchable-select#selectOption"
+           class="px-3 py-2 cursor-pointer hover:bg-gray-100 text-gray-500 italic">
+        <%= prompt %>
+      </div>
+    <% end %>
+    <% options.each do |option| %>
+      <div data-searchable-select-target="option"
+           data-value="<%= option.send(value_method) %>"
+           data-action="click->searchable-select#selectOption"
+           class="px-3 py-2 cursor-pointer hover:bg-gray-100 <%= 'bg-cyan-50' if option.send(value_method).to_s == selected.to_s %>">
+        <%= option.send(text_method) %>
+      </div>
+    <% end %>
+  </div>
+</div>

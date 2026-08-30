@@ -1,0 +1,148 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Portal do Parceiro - Atleta</h1>
+    <p>Bem-vindo, <strong><%= @profile&.name || current_user.email_address %></strong>!</p>
+  </header>
+
+  <% if @profile %>
+    <div class="profile-cards">
+      <div class="info-card">
+        <h3>Informações do Parceiro</h3>
+        <dl>
+          <dt>ID do Parceiro:</dt>
+          <dd><%= @profile.partner_id || "Não atribuído" %></dd>
+
+          <dt>Profissão:</dt>
+          <dd><%= @profile.profession || "Não definida" %></dd>
+
+          <dt>Especialidade:</dt>
+          <dd><%= @profile.specialty || "Não definida" %></dd>
+
+          <dt>Status:</dt>
+          <dd>
+            <span class="status-badge <%= @profile.status %>">
+              <%= @profile.status&.titleize || "Inativo" %>
+            </span>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-warning">
+      <p>Perfil de parceiro não configurado. Entre em contato com o administrador.</p>
+    </div>
+  <% end %>
+
+  <div class="dashboard-actions">
+    <%= button_to "Sair", logout_path, method: :delete, class: "button" %>
+  </div>
+</div>
+
+<style nonce="<%= content_security_policy_nonce %>">
+  .dashboard-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .dashboard-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .dashboard-header h1 {
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+  }
+
+  .dashboard-header p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+
+  .profile-cards {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .info-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .info-card h3 {
+    margin-bottom: 1.5rem;
+    color: #1a1a2e;
+    font-size: 1.5rem;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1rem;
+  }
+
+  dt {
+    font-weight: 600;
+    color: #555;
+  }
+
+  dd {
+    color: #333;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .status-badge.active {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  .alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .alert-warning {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+  }
+
+  .dashboard-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+  }
+
+  .button.secondary {
+    background: #6c757d;
+  }
+
+  .button:hover {
+    opacity: 0.9;
+  }
+</style>

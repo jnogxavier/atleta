@@ -1,0 +1,129 @@
+<%
+  # Generic pagination partial
+  #
+  # Required locals:
+  #   - paginated_results: Kaminari paginated collection
+  #   - resource_label: Label for result count (e.g., "alunos", "planos")
+  #   - search_path: Path helper for search results (e.g., search_admin_students_path)
+  #   - default_path: Path helper for non-search navigation (e.g., admin_dashboard_path)
+  #   - default_path_params: Hash of params for default_path (e.g., {tab: 'students'})
+  #   - search_query: Optional search query string
+  #
+  # Example usage in controller:
+  #   render_to_string(
+  #     partial: 'admin/dashboard/generic_pagination',
+  #     locals: {
+  #       paginated_results: @approved_students,
+  #       resource_label: "alunos",
+  #       search_path: :search_admin_students_path,
+  #       default_path: :admin_dashboard_path,
+  #       default_path_params: { tab: 'students' },
+  #       search_query: search_query
+  #     }
+  #   )
+%>
+
+<% if paginated_results.total_pages > 1 %>
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div class="flex items-center justify-between">
+      <div class="text-sm text-gray-600">
+        Mostrando <%= paginated_results.offset_value + 1 %>-<%= [paginated_results.offset_value + paginated_results.length, paginated_results.total_count].min %> de <%= paginated_results.total_count %> <%= resource_label %>
+      </div>
+      <div class="flex gap-2">
+        <% is_search = defined?(search_query) && search_query.present? %>
+
+        <% if is_search %>
+          <% search_params = { search: search_query } %>
+          <!-- Previous button (search mode) -->
+          <% if paginated_results.prev_page %>
+            <%= link_to public_send(search_path.to_s + '_path', search_params.merge(page: paginated_results.prev_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </span>
+          <% end %>
+
+          <!-- Page number buttons (search mode) -->
+          <% paginated_results.total_pages.times do |i| %>
+            <% page_num = i + 1 %>
+            <% if (page_num - paginated_results.current_page).abs <= 2 || page_num == 1 || page_num == paginated_results.total_pages %>
+              <%= link_to public_send(search_path.to_s + '_path', search_params.merge(page: page_num)),
+                  class: "px-3 py-2 border rounded-lg transition-colors #{page_num == paginated_results.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}", data: { action: "click->search#handlePaginationLink" } do %>
+                <%= page_num %>
+              <% end %>
+            <% elsif (page_num - paginated_results.current_page).abs == 3 %>
+              <span class="px-3 py-2 text-gray-400">...</span>
+            <% end %>
+          <% end %>
+
+          <!-- Next button (search mode) -->
+          <% if paginated_results.next_page %>
+            <%= link_to public_send(search_path.to_s + '_path', search_params.merge(page: paginated_results.next_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          <% end %>
+
+        <% else %>
+          <!-- Non-search pagination -->
+
+          <!-- Previous button (default mode) -->
+          <% if paginated_results.prev_page %>
+            <%= link_to send(default_path, default_path_params.merge(page: paginated_results.prev_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </span>
+          <% end %>
+
+          <!-- Page number buttons (default mode) -->
+          <% paginated_results.total_pages.times do |i| %>
+            <% page_num = i + 1 %>
+            <% if (page_num - paginated_results.current_page).abs <= 2 || page_num == 1 || page_num == paginated_results.total_pages %>
+              <%= link_to send(default_path, default_path_params.merge(page: page_num)),
+                  class: "px-3 py-2 border rounded-lg transition-colors #{page_num == paginated_results.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+                <%= page_num %>
+              <% end %>
+            <% elsif (page_num - paginated_results.current_page).abs == 3 %>
+              <span class="px-3 py-2 text-gray-400">...</span>
+            <% end %>
+          <% end %>
+
+          <!-- Next button (default mode) -->
+          <% if paginated_results.next_page %>
+            <%= link_to send(default_path, default_path_params.merge(page: paginated_results.next_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,107 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+  <%= form_with(model: @student, url: @student.persisted? ? admin_student_path(@student) : admin_students_path, method: @student.persisted? ? :patch : :post, local: true, class: "space-y-6") do |form| %>
+    <% if @student.errors.any? || (@student.user && @student.user.errors.any?) %>
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+        <h3 class="text-sm font-medium text-red-800 mb-2">
+          <%= pluralize(@student.errors.count + (@student.user&.errors&.count || 0), "erro") %> encontrado(s):
+        </h3>
+        <ul class="list-disc list-inside text-sm text-red-700 space-y-1">
+          <% @student.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          <% if @student.user %>
+            <% @student.user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">Informações do Aluno</h3>
+
+        <div>
+          <%= form.label :name, "Nome Completo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_field :name, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent", required: true %>
+        </div>
+
+        <div>
+          <%= form.label :plan, "Plano", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.select :plan,
+              options_for_select(['Mensal', 'Trimestral', 'Semestral', 'Anual'], @student.plan),
+              { prompt: 'Selecione um plano' },
+              class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :expires_at, "Data de Vencimento", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.date_field :expires_at, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.select :status,
+              options_for_select([['Ativo', 'active'], ['Inativo', 'inactive'], ['Suspenso', 'suspended']], @student.status),
+              {},
+              class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent" %>
+        </div>
+
+        <div>
+          <%= form.label :value, "Valor Mensal (R$)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.number_field :value, step: 0.01, min: 0, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent", placeholder: "0.00" %>
+        </div>
+
+        <% if @student.persisted? %>
+          <div>
+            <%= form.label :student_id, "Código do Aluno", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.text_field :student_id, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", readonly: true %>
+            <p class="text-xs text-gray-500 mt-1">O código é gerado automaticamente e não pode ser alterado</p>
+          </div>
+        <% end %>
+      </div>
+
+      
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">Conta de Acesso</h3>
+
+        <%= form.fields_for :user_attributes, @student.user do |user_form| %>
+          <div>
+            <%= user_form.label :email_address, "Email", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= user_form.email_field :email_address, value: @student.user&.email_address, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent", required: !@student.persisted? %>
+          </div>
+
+          <% unless @student.persisted? %>
+            <div>
+              <%= user_form.label :password, "Senha", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= user_form.password_field :password, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent", required: true %>
+              <p class="text-xs text-gray-500 mt-1">Mínimo de 8 caracteres</p>
+            </div>
+
+            <div>
+              <%= user_form.label :password_confirmation, "Confirmar Senha", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= user_form.password_field :password_confirmation, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent", required: true %>
+            </div>
+          <% else %>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p class="text-sm text-blue-700">
+                <svg class="h-4 w-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Para alterar a senha do aluno, use a função de redefinição de senha.
+              </p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="flex gap-3 pt-6 border-t">
+      <%= link_to "Cancelar", admin_dashboard_path, class: "px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" %>
+      <%= form.submit @student.persisted? ? "Atualizar Aluno" : "Criar Aluno",
+          class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors" %>
+    </div>
+  <% end %>
+</div>

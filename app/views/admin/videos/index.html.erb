@@ -1,0 +1,27 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Vídeos</h1>
+
+  <% if @videos.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @videos.each do |video| %>
+        <div class="bg-white rounded-lg shadow-md p-4">
+          <% if video.thumbnail_url.present? %>
+            <%= image_tag video.thumbnail_url, class: "w-full h-48 object-cover rounded mb-4", loading: "lazy" %>
+          <% end %>
+          <h3 class="font-semibold text-lg mb-2"><%= video.exercise_title %></h3>
+          <% if video.description.present? %>
+            <p class="text-gray-600 text-sm mb-4"><%= video.description %></p>
+          <% end %>
+          <div class="flex gap-2">
+            <% if video.safe_url.present? %>
+              <%# brakeman:ignore:LinkToHref %>
+              <%= link_to "Ver Vídeo", video.safe_url, target: "_blank", rel: "noopener noreferrer", class: "text-cyan-500 hover:text-cyan-600" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-600">Nenhum vídeo encontrado.</p>
+  <% end %>
+</div>

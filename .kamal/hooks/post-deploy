@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Verify migrations ran successfully
+echo "Verifying database schema is up to date..."
+kamal app exec --reuse "bin/rails db:migrate:status" | tail -5

@@ -1,0 +1,102 @@
+<div class="food-item bg-gray-50 p-3 rounded border border-gray-200"
+     data-controller="nutritional-calculator">
+  <%= f.hidden_field :_destroy, class: 'destroy-field' %>
+
+  <div class="flex gap-2 mb-1">
+    <div class="flex-1">
+      <span class="text-xs font-medium text-gray-700">Alimento (TACO)</span>
+    </div>
+    <div class="w-24">
+      <span class="text-xs font-medium text-gray-700">Quantidade (g)</span>
+    </div>
+    <div class="w-20">
+      <span class="text-xs font-medium text-gray-700">Calorias</span>
+    </div>
+    <div class="w-20">
+      <span class="text-xs font-medium text-gray-700">Prot (g)</span>
+    </div>
+    <div class="w-20">
+      <span class="text-xs font-medium text-gray-700">Carb (g)</span>
+    </div>
+    <div class="w-20">
+      <span class="text-xs font-medium text-gray-700">Gord (g)</span>
+    </div>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="flex gap-2 items-center">
+    <div class="flex-1 relative" data-controller="food-search">
+      <%= f.select :food_id,
+          options_for_select(
+            @foods.map { |food| [food.name.strip, food.id, {
+              'data-energy' => food.energy_kcal,
+              'data-protein' => food.protein_g,
+              'data-carbs' => food.carbohydrate_g || 0,
+              'data-fat' => food.fat_g || 0,
+              'data-food-category' => food.category || ''
+            }] },
+            f.object.food_id
+          ),
+          { prompt: "Selecione um alimento" },
+          {
+            class: "hidden",
+            data: {
+              nutritional_calculator_target: "foodSelect",
+              action: "change->nutritional-calculator#calculate",
+              food_search_target: "hiddenSelect"
+            }
+          } %>
+
+      <input
+        type="text"
+        placeholder="Digite para buscar alimento..."
+        class="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+        autocomplete="off"
+        data-food-search-target="searchInput"
+        data-action="input->food-search#search focus->food-search#showAll"
+      >
+
+      <div data-food-search-target="searchResults"
+           class="absolute z-[9999] w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 hidden max-h-72 overflow-y-auto overflow-x-hidden top-full left-0"></div>
+    </div>
+    <div class="w-24">
+      <%= f.number_field :quantity_grams,
+          step: 0.01,
+          placeholder: "Ex: 150",
+          class: "w-full px-3 py-2 border border-gray-300 rounded text-sm quantity-input",
+          data: {
+            nutritional_calculator_target: "quantityInput",
+            action: "input->nutritional-calculator#calculate"
+          } %>
+    </div>
+    <div class="w-20">
+      <input type="text" readonly
+             data-nutritional-calculator-target="energyDisplay"
+             class="calculated-energy w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+             placeholder="-">
+    </div>
+    <div class="w-20">
+      <input type="text" readonly
+             data-nutritional-calculator-target="proteinDisplay"
+             class="calculated-protein w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+             placeholder="-">
+    </div>
+    <div class="w-20">
+      <input type="text" readonly
+             data-nutritional-calculator-target="carbsDisplay"
+             class="calculated-carbs w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+             placeholder="-">
+    </div>
+    <div class="w-20">
+      <input type="text" readonly
+             data-nutritional-calculator-target="fatDisplay"
+             class="calculated-fat w-full px-3 py-2 border border-gray-200 bg-gray-100 rounded text-sm"
+             placeholder="-">
+    </div>
+    <button type="button"
+            data-action="click->nutrition-plan-form#removeFood"
+            class="remove-food-btn w-10 h-10 bg-red-500 text-white rounded hover:bg-red-600 text-sm font-medium flex items-center justify-center">
+      ×
+    </button>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center p-4">
+  <div class="max-w-2xl w-full">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center">
+      <div class="mb-6">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+          <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Cadastro Enviado com Sucesso!
+      </h1>
+
+      <div class="space-y-4 mb-8">
+        <p class="text-lg text-gray-700">
+          Seu cadastro foi recebido e está aguardando aprovação do nosso time administrativo.
+        </p>
+
+        <div class="bg-cyan-50 border border-cyan-200 rounded-lg p-6 text-left">
+          <h3 class="font-semibold text-cyan-900 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Próximos Passos
+          </h3>
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-cyan-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span>Nossa equipe irá analisar seu cadastro em até 24 horas</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-cyan-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span>Você receberá um e-mail assim que seu cadastro for aprovado</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-5 h-5 text-cyan-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span>Após a aprovação, você poderá fazer login com as credenciais cadastradas</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-left">
+          <p class="text-sm text-yellow-800">
+            <strong>Importante:</strong> Não tente fazer login até receber a confirmação de aprovação por e-mail.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <%= link_to root_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3 bg-cyan-500 text-white font-semibold rounded-lg hover:bg-cyan-600 transition-colors" do %>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          Voltar à Página Inicial
+        <% end %>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <p class="text-sm text-gray-600">
+          Tem alguma dúvida? Entre em contato conosco:
+          <br>
+          <a href="mailto:contato@example.com" class="text-cyan-600 hover:text-cyan-700 font-medium">
+            contato@example.com
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

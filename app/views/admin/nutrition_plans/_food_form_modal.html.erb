@@ -1,0 +1,145 @@
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     data-food-form-modal-target="container"
+     data-action="click->food-form-modal#closeBackground">
+  <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full min-h-[32rem] overflow-y-auto"
+       data-controller="food-form-modal-search">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-bold text-gray-900" data-food-form-modal-search-target="title">Criar Novo Alimento</h3>
+        <button data-action="click->food-form-modal#close" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 border-b border-gray-200 bg-gray-50">
+      <div class="flex gap-2">
+        <button type="button"
+                data-action="click->food-form-modal-search#toggleCreateMode"
+                data-food-form-modal-search-target="createModeButton"
+                class="flex-1 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 font-medium">
+          Criar Novo Alimento
+        </button>
+        <button type="button"
+                data-action="click->food-form-modal-search#toggleEditMode"
+                data-food-form-modal-search-target="editModeButton"
+                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium">
+          Editar ou Excluir Alimento
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 border-b border-gray-200 bg-gray-50 hidden"
+         data-food-form-modal-search-target="searchSection">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Buscar Alimento Existente</label>
+      <div class="relative" data-controller="food-search">
+        <select data-food-search-target="hiddenSelect" class="hidden">
+          <option value="">Selecione um alimento</option>
+          <% @foods.each do |food| %>
+            <option value="<%= food.id %>"
+                    data-energy="<%= food.energy_kcal %>"
+                    data-protein="<%= food.protein_g %>"
+                    data-carbs="<%= food.carbohydrate_g || 0 %>"
+                    data-fat="<%= food.fat_g || 0 %>"
+                    data-food-category="<%= food.category || '' %>">
+              <%= food.name.strip %>
+            </option>
+          <% end %>
+        </select>
+
+        <input type="text"
+               data-food-search-target="searchInput"
+               data-action="input->food-search#search focus->food-search#showAll change->food-form-modal-search#onFoodSelected"
+               placeholder="Digite o nome do alimento..."
+               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+
+        <div data-food-search-target="searchResults"
+             class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+        </div>
+      </div>
+
+      <div class="mt-3 flex gap-2 hidden" data-food-form-modal-search-target="clearButton">
+        <button type="button"
+                data-action="click->food-form-modal-search#deleteSelected"
+                class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm font-medium hover:bg-red-200">
+          Deletar
+        </button>
+        <button type="button"
+                data-action="click->food-form-modal-search#clearSelection"
+                class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200">
+          Limpar e Criar Novo
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 hidden" data-food-form-modal-search-target="formSection">
+      <form id="food-form" data-food-form-modal-target="form" data-food-form-modal-search-target="form" data-action="submit->food-form-modal-search#submitForm" class="space-y-4">
+        <input type="hidden" id="selected-food-id" data-food-form-modal-search-target="selectedFoodId" value="">
+
+        <div id="food-form-errors" data-food-form-modal-search-target="errors" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+          <h2 class="text-red-800 font-semibold mb-2">Erro ao criar alimento</h2>
+          <ul id="error-list" class="list-disc list-inside text-red-700 text-sm"></ul>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Alimento</label>
+            <input type="text" name="food[name]" placeholder="Ex: Arroz integral"
+                   data-food-form-modal-search-target="foodName"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" required>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+            <select name="food[category]" id="food-category-select"
+                    data-food-form-modal-search-target="foodCategory"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+              <option value="">Sem Categoria</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Energia (kcal por 100g)</label>
+            <input type="number" name="food[energy_kcal]" step="0.01" placeholder="Ex: 130"
+                   data-food-form-modal-search-target="foodEnergy"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Proteína (g por 100g)</label>
+            <input type="number" name="food[protein_g]" step="0.01" placeholder="Ex: 2.7"
+                   data-food-form-modal-search-target="foodProtein"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Carboidratos (g por 100g)</label>
+            <input type="number" name="food[carbohydrate_g]" step="0.01" placeholder="Ex: 28"
+                   data-food-form-modal-search-target="foodCarbs"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Gordura (g por 100g)</label>
+            <input type="number" name="food[fat_g]" step="0.01" placeholder="Ex: 0.3"
+                   data-food-form-modal-search-target="foodFat"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+        </div>
+
+        <div class="flex gap-3 justify-end border-t border-gray-200 pt-4">
+          <button type="button" data-action="click->food-form-modal#close" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+            Cancelar
+          </button>
+          <button type="submit"
+                  data-food-form-modal-search-target="submitButton"
+                  class="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 font-medium">
+            Criar Alimento
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

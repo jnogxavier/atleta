@@ -1,0 +1,188 @@
+<div class="space-y-4">
+  <% exercises.each do |training_exercise| %>
+    <%
+      # Get the actual exercise based on type
+      exercise = case exercise_type
+                 when 'strength' then training_exercise.strength_exercise
+                 when 'mobility' then training_exercise.mobility_exercise
+                 when 'core' then training_exercise.core_exercise
+                 when 'cardio' then training_exercise.cardio_exercise
+                 end
+
+      # Find the workout session exercise for this training exercise
+      session_exercise = workout_session.workout_session_exercises.find_by(
+        exercise_type: exercise_type,
+        exercise_id: training_exercise.id
+      )
+
+      is_completed = session_exercise&.completed || false
+    %>
+
+    <div class="bg-white rounded-lg border <%= is_completed ? 'border-green-300 bg-green-50' : 'border-gray-200' %> shadow-sm hover:shadow-md transition-all">
+      <div class="p-6">
+        <div class="flex items-start justify-between gap-4">
+          
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-3">
+              <h3 class="text-lg font-semibold text-gray-900"><%= exercise.name %></h3>
+              <% if is_completed %>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                  ✓ Concluído
+                </span>
+              <% end %>
+            </div>
+
+            
+            <div class="flex flex-wrap gap-4 mb-3">
+              <% case exercise_type %>
+              <% when 'strength' %>
+                <% if training_exercise.sets.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Séries:</span> <%= training_exercise.sets %>
+                  </span>
+                <% end %>
+                <% if training_exercise.reps.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Reps:</span> <%= training_exercise.reps %>
+                  </span>
+                <% end %>
+                <% if training_exercise.rest.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Descanso:</span> <%= training_exercise.rest %>s
+                  </span>
+                <% end %>
+                <% if exercise.muscle_group.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Grupo:</span> <%= exercise.muscle_group %>
+                  </span>
+                <% end %>
+                <% if exercise.equipment.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Equipamento:</span> <%= exercise.equipment %>
+                  </span>
+                <% end %>
+
+              <% when 'mobility' %>
+                <% if training_exercise.sets.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Séries:</span> <%= training_exercise.sets %>
+                  </span>
+                <% end %>
+                <% if training_exercise.duration.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Duração:</span> <%= training_exercise.duration %>s
+                  </span>
+                <% end %>
+                <% if training_exercise.hold.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Hold:</span> <%= training_exercise.hold %>s
+                  </span>
+                <% end %>
+                <% if exercise.region.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Região:</span> <%= exercise.region %>
+                  </span>
+                <% end %>
+
+              <% when 'core' %>
+                <% if training_exercise.sets.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Séries:</span> <%= training_exercise.sets %>
+                  </span>
+                <% end %>
+                <% if training_exercise.reps.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Reps:</span> <%= training_exercise.reps %>
+                  </span>
+                <% end %>
+                <% if training_exercise.rest.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Descanso:</span> <%= training_exercise.rest %>s
+                  </span>
+                <% end %>
+                <% if exercise.category.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Categoria:</span> <%= exercise.category %>
+                  </span>
+                <% end %>
+
+              <% when 'cardio' %>
+                <% if training_exercise.duration.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Duração:</span> <%= training_exercise.duration %> min
+                  </span>
+                <% end %>
+                <% if training_exercise.intensity.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Intensidade:</span> <%= training_exercise.intensity.titleize %>
+                  </span>
+                <% end %>
+                <% if training_exercise.calories.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Calorias alvo:</span> <%= training_exercise.calories %> kcal
+                  </span>
+                <% end %>
+                <% if exercise.cardio_type.present? %>
+                  <span class="text-sm text-gray-600">
+                    <span class="font-medium">Tipo:</span> <%= exercise.cardio_type %>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+
+            
+            <% if training_exercise.notes.present? %>
+              <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
+                <p class="text-sm text-gray-700">
+                  <span class="font-medium">💡 Observação:</span> <%= training_exercise.notes %>
+                </p>
+              </div>
+            <% end %>
+
+            
+            <% if exercise.description.present? %>
+              <p class="text-sm text-gray-600 mb-3"><%= exercise.description %></p>
+            <% end %>
+
+            
+            <% if exercise.video_url.present? %>
+              <a href="<%= exercise.video_url %>"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="inline-flex items-center gap-2 text-cyan-600 hover:text-cyan-700 text-sm font-medium transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Ver Demonstração
+              </a>
+            <% end %>
+          </div>
+
+          
+          <% if session_exercise %>
+            <%= button_to toggle_workout_session_exercise_path(session_exercise),
+                          method: :patch,
+                          class: "flex-shrink-0 px-6 py-3 rounded-lg font-medium transition-colors #{is_completed ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}" do %>
+              <% if is_completed %>
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Feito
+                </span>
+              <% else %>
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  </svg>
+                  Marcar
+                </span>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

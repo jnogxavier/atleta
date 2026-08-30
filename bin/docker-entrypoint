@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+# Ensure storage directory exists with proper permissions
+mkdir -p /rails/storage
+chmod 755 /rails/storage
+
+# If running the rails server then create or migrate existing database
+if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  ./bin/rails db:prepare
+fi
+
+exec "${@}"

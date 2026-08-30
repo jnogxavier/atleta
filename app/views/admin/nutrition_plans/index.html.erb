@@ -1,0 +1,132 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Planos Nutricionais</h1>
+    <%= link_to new_admin_nutrition_plan_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center gap-2" do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      Novo Plano
+    <% end %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aluno</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Plano</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Refeições</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% if @nutrition_plans.any? %>
+          <% @nutrition_plans.each do |plan| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <%= plan.student_profile.name %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <%= plan.name %>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">
+                <%= truncate(plan.description, length: 50) %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= plan.meals.count %> refeições
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if plan.active %>
+                  <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Inativo</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex items-center justify-end gap-2">
+                <%= link_to admin_nutrition_plan_path(plan), class: "text-cyan-600 hover:text-cyan-900" do %>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                <% end %>
+                <%= link_to edit_admin_nutrition_plan_path(plan), class: "text-cyan-600 hover:text-cyan-900" do %>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                <% end %>
+                <%= button_to admin_nutrition_plan_path(plan), method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir este plano?" }, class: "text-red-600 hover:text-red-900" do %>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <p class="mt-2">Nenhum plano nutricional cadastrado</p>
+              <%= link_to "Criar primeiro plano", new_admin_nutrition_plan_path, class: "mt-4 inline-block px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @nutrition_plans.total_pages > 1 %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mt-6">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-600">
+          Mostrando <%= @nutrition_plans.offset_value + 1 %>-<%= [@nutrition_plans.offset_value + @nutrition_plans.length, @nutrition_plans.total_count].min %> de <%= @nutrition_plans.total_count %> planos
+        </div>
+        <div class="flex gap-2">
+          <% if @nutrition_plans.prev_page %>
+            <%= link_to admin_nutrition_plans_path(page: @nutrition_plans.prev_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </span>
+          <% end %>
+
+          <% @nutrition_plans.total_pages.times do |i| %>
+            <% page_num = i + 1 %>
+            <% if (page_num - @nutrition_plans.current_page).abs <= 2 || page_num == 1 || page_num == @nutrition_plans.total_pages %>
+              <%= link_to admin_nutrition_plans_path(page: page_num),
+                  class: "px-3 py-2 border rounded-lg transition-colors #{page_num == @nutrition_plans.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+                <%= page_num %>
+              <% end %>
+            <% elsif (page_num - @nutrition_plans.current_page).abs == 3 %>
+              <span class="px-3 py-2 text-gray-400">...</span>
+            <% end %>
+          <% end %>
+
+          <% if @nutrition_plans.next_page %>
+            <%= link_to admin_nutrition_plans_path(page: @nutrition_plans.next_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

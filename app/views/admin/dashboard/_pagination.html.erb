@@ -1,0 +1,92 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+  <div class="flex items-center justify-between">
+    <div class="text-sm text-gray-600">
+      Mostrando <%= approved_students.offset_value + 1 %>-<%= [approved_students.offset_value + approved_students.length, approved_students.total_count].min %> de <%= approved_students.total_count %> alunos
+    </div>
+    <div class="flex gap-2">
+      <% is_search = defined?(search_query) && search_query.present? %>
+      <% if is_search %>
+        <% search_params = { search: search_query } %>
+        <% if approved_students.prev_page %>
+          <%= link_to search_admin_students_path(search_params.merge(page: approved_students.prev_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          <% end %>
+        <% else %>
+          <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </span>
+        <% end %>
+
+        <% approved_students.total_pages.times do |i| %>
+          <% page_num = i + 1 %>
+          <% if (page_num - approved_students.current_page).abs <= 2 || page_num == 1 || page_num == approved_students.total_pages %>
+            <%= link_to search_admin_students_path(search_params.merge(page: page_num)),
+                class: "px-3 py-2 border rounded-lg transition-colors #{page_num == approved_students.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}", data: { action: "click->search#handlePaginationLink" } do %>
+              <%= page_num %>
+            <% end %>
+          <% elsif (page_num - approved_students.current_page).abs == 3 %>
+            <span class="px-3 py-2 text-gray-400">...</span>
+          <% end %>
+        <% end %>
+
+        <% if approved_students.next_page %>
+          <%= link_to search_admin_students_path(search_params.merge(page: approved_students.next_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          <% end %>
+        <% else %>
+          <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </span>
+        <% end %>
+      <% else %>
+        <% if approved_students.prev_page %>
+          <%= link_to admin_dashboard_path(students_page: approved_students.prev_page, tab: 'students'), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          <% end %>
+        <% else %>
+          <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </span>
+        <% end %>
+
+        <% approved_students.total_pages.times do |i| %>
+          <% page_num = i + 1 %>
+          <% if (page_num - approved_students.current_page).abs <= 2 || page_num == 1 || page_num == approved_students.total_pages %>
+            <%= link_to admin_dashboard_path(students_page: page_num, tab: 'students'),
+                class: "px-3 py-2 border rounded-lg transition-colors #{page_num == approved_students.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+              <%= page_num %>
+            <% end %>
+          <% elsif (page_num - approved_students.current_page).abs == 3 %>
+            <span class="px-3 py-2 text-gray-400">...</span>
+          <% end %>
+        <% end %>
+
+        <% if approved_students.next_page %>
+          <%= link_to admin_dashboard_path(students_page: approved_students.next_page, tab: 'students'), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          <% end %>
+        <% else %>
+          <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

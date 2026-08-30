@@ -1,0 +1,296 @@
+<div class="space-y-6" data-controller="search" data-search-url-value="<%= search_admin_students_path %>" data-search-debounce-delay-value="300">
+  
+  <%
+    pending_emails_priority = PendingRegistration.pending_only.pluck(:email)
+    priority_students = StudentProfile
+      .includes(user: :anamnese, trainings: [])
+      .joins(:trainings)
+      .joins("INNER JOIN anamneses ON anamneses.user_id = users.id")
+      .joins(:user)
+      .where(trainings: { active: true })
+      .where(rejected: false)
+      .where.not(users: { email_address: pending_emails_priority })
+      .distinct
+      .order(created_at: :desc)
+      .limit(3)
+  %>
+
+  <% if priority_students.any? %>
+    <div class="bg-gradient-to-r from-green-500/10 to-cyan-500/10 border border-green-500/20 rounded-lg p-6 shadow-sm">
+      <h3 class="text-lg font-semibold text-green-700 mb-4 flex items-center gap-2">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Notificações Prioritárias
+      </h3>
+      <div class="space-y-2">
+        <% priority_students.each do |profile| %>
+          <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-green-200">
+            <div>
+              <p class="font-medium text-sm text-gray-900"><%= profile.name %></p>
+              <p class="text-xs text-gray-600">Perfil completo e treino ativo</p>
+            </div>
+            <%= link_to "Ver Perfil", admin_student_path(profile),
+                class: "px-3 py-1 border border-green-500 text-green-700 hover:bg-green-50 rounded-lg text-sm font-medium transition-colors" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <%
+        pending_emails_stats = PendingRegistration.pending_only.pluck(:email)
+        approved_count = StudentProfile.not_rejected.joins(:user).where.not(users: { email_address: pending_emails_stats }).count
+        active_approved_count = StudentProfile.active.not_rejected.joins(:user).where.not(users: { email_address: pending_emails_stats }).count
+      %>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-cyan-600" data-student-search-target="count"><%= approved_count %></div>
+        <p class="text-sm text-gray-600">Total de Alunos</p>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600"><%= active_approved_count %></div>
+        <p class="text-sm text-gray-600">Alunos Ativos</p>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600"><%= Anamnese.count %></div>
+        <p class="text-sm text-gray-600">Perfis Completos</p>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-blue-600">
+          <%= StudentProfile.active.where('expires_at <= ?', 15.days.from_now).count %>
+        </div>
+        <p class="text-sm text-gray-600">Notificações</p>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex-1 relative">
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text"
+               data-search-target="input"
+               data-action="input->search#filter"
+               placeholder="Buscar por nome, email ou código..."
+               class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+        <button data-action="click->search#clearSearch"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="flex gap-2">
+        <% unless Rails.env.production? %>
+          <button data-action="click->bulk-notification#open"
+                  class="px-4 py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                  data-controller="bulk-notification">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+            Enviar Notificação
+          </button>
+        <% end %>
+        <%= link_to new_admin_student_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center justify-center gap-2 whitespace-nowrap" do %>
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Novo Aluno
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" data-bulk-notification-target="modal">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900">Enviar Notificação</h2>
+        <button data-action="click->bulk-notification#close" class="text-gray-400 hover:text-gray-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <%= form_with url: bulk_send_admin_notifications_path, method: :post, class: "space-y-4" do |f| %>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Destinatários</label>
+          <select name="recipient_type" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            <option value="all">Todos os alunos</option>
+            <option value="active">Apenas alunos ativos</option>
+            <option value="inactive">Apenas alunos inativos</option>
+            <option value="expiring_soon">Planos expirando em 15 dias</option>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+          <select name="notification_type" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            <option value="info">Informação</option>
+            <option value="success">Sucesso</option>
+            <option value="warning">Aviso</option>
+            <option value="error">Erro</option>
+          </select>
+        </div>
+
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Título</label>
+          <%= f.text_field :title, required: true, placeholder: "Digite o título da notificação", class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+        </div>
+
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Mensagem</label>
+          <%= f.text_area :message, required: true, rows: 4, placeholder: "Digite a mensagem da notificação", class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+        </div>
+
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Link de Ação (opcional)</label>
+          <%= f.text_field :action_url, placeholder: "/trainings", class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+          <p class="text-xs text-gray-500 mt-1">URL para onde o aluno será direcionado ao clicar na notificação</p>
+        </div>
+
+        
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" data-action="click->bulk-notification#close" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+            Cancelar
+          </button>
+          <%= f.submit "Enviar Notificação", class: "px-6 py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+
+  <div class="hidden bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center" data-search-target="noResults">
+    <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+    </svg>
+    <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum aluno encontrado</h3>
+    <p class="text-gray-600">Tente ajustar os termos da sua busca</p>
+  </div>
+
+
+  <div data-search-target="container">
+    <%
+      # Filter out students who:
+      # 1. Have a pending registration (status = 'pending')
+      # 2. Are rejected (rejected = true)
+      pending_emails = PendingRegistration.pending_only.pluck(:email)
+
+      approved_students = StudentProfile
+        .includes(user: :anamnese, trainings: [])
+        .where(rejected: false)
+        .joins(:user)
+        .where.not(users: { email_address: pending_emails })
+        .order(created_at: :desc)
+        .page(params[:page]).per(7)
+    %>
+    <%= render 'admin/dashboard/students_tab_items', approved_students: approved_students %>
+  </div>
+
+
+  <div data-search-target="pagination">
+    <% if approved_students.total_pages > 1 %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-600">
+          Mostrando <%= approved_students.offset_value + 1 %>-<%= [approved_students.offset_value + approved_students.length, approved_students.total_count].min %> de <%= approved_students.total_count %> alunos
+        </div>
+        <div class="flex gap-2">
+          <% if approved_students.prev_page %>
+            <%= link_to admin_dashboard_path(page: approved_students.prev_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </span>
+          <% end %>
+
+          <% approved_students.total_pages.times do |i| %>
+            <% page_num = i + 1 %>
+            <% if (page_num - approved_students.current_page).abs <= 2 || page_num == 1 || page_num == approved_students.total_pages %>
+              <%= link_to admin_dashboard_path(page: page_num),
+                  class: "px-3 py-2 border rounded-lg transition-colors #{page_num == approved_students.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+                <%= page_num %>
+              <% end %>
+            <% elsif (page_num - approved_students.current_page).abs == 3 %>
+              <span class="px-3 py-2 text-gray-400">...</span>
+            <% end %>
+          <% end %>
+
+          <% if approved_students.next_page %>
+            <%= link_to admin_dashboard_path(page: approved_students.next_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+
+  <% if StudentProfile.count == 0 %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+      <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum aluno encontrado</h3>
+      <p class="text-gray-600">Cadastre seu primeiro aluno para começar</p>
+    </div>
+  <% end %>
+</div>
+
+<div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+
+<style nonce="<%= content_security_policy_nonce %>">
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-out {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+  }
+</style>

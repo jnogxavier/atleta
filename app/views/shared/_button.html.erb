@@ -1,0 +1,69 @@
+<%
+# Button component for consistent button styling
+# Usage:
+#   <%= render 'shared/button', text: 'Save', variant: 'primary', type: 'submit' %>
+#   <%= render 'shared/button', text: 'Cancel', variant: 'secondary', url: root_path %>
+#
+# Parameters:
+#   - text: (required) The button text
+#   - variant: (optional) The style variant: 'primary', 'secondary', 'danger', 'success', 'ghost'
+#   - size: (optional) The size: 'sm', 'md' (default), 'lg'
+#   - type: (optional) Button type for form buttons: 'button', 'submit', 'reset'
+#   - url: (optional) If provided, renders as a link instead of button
+#   - method: (optional) HTTP method for link (default: 'get')
+#   - icon: (optional) Icon name to display before text
+#   - icon_only: (optional) If true, only shows icon without text
+#   - classes: (optional) Additional CSS classes
+#   - data: (optional) Hash of data attributes
+#   - disabled: (optional) Boolean to disable button
+
+variant ||= 'primary'
+size ||= 'md'
+type ||= 'button'
+method ||= 'get'
+classes ||= ''
+data ||= {}
+disabled ||= false
+icon ||= nil
+icon_only ||= false
+
+variant_classes = {
+  'primary' => 'bg-cyan-500 text-white hover:bg-cyan-600',
+  'secondary' => 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+  'danger' => 'bg-red-500 text-white hover:bg-red-600',
+  'success' => 'bg-green-500 text-white hover:bg-green-600',
+  'ghost' => 'text-gray-700 hover:bg-gray-100'
+}
+
+size_classes = {
+  'sm' => 'px-3 py-1.5 text-sm',
+  'md' => 'px-4 py-2 text-base',
+  'lg' => 'px-6 py-3 text-lg'
+}
+
+base_classes = "inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+button_classes = "#{base_classes} #{variant_classes[variant]} #{size_classes[size]} #{classes}"
+%>
+
+<% if url %>
+  <%= link_to url, method: method, class: button_classes, data: data do %>
+    <% if icon %>
+      <%= icon(icon, class: 'h-5 w-5') %>
+    <% end %>
+    <% unless icon_only %>
+      <%= text %>
+    <% end %>
+  <% end %>
+<% else %>
+  <button type="<%= type %>"
+          class="<%= button_classes %>"
+          <%= 'disabled' if disabled %>
+          <%= data.map { |k, v| "data-#{k}=\"#{v}\"" }.join(' ').html_safe %>>
+    <% if icon %>
+      <%= icon(icon, class: 'h-5 w-5') %>
+    <% end %>
+    <% unless icon_only %>
+      <%= text %>
+    <% end %>
+  </button>
+<% end %>

@@ -1,0 +1,234 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="mb-8">
+      <%= link_to student_dashboard_path(tab: "evaluation"), class: "inline-flex items-center text-cyan-600 hover:text-cyan-700 mb-4" do %>
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Voltar para Dashboard
+      <% end %>
+
+      <h1 class="text-3xl font-bold text-gray-900">Adicionar Fotos de Avaliação</h1>
+      <p class="mt-2 text-gray-600">Envie suas fotos de progresso para avaliação do treinador</p>
+    </div>
+
+
+    <div class="bg-gray-50 rounded-lg p-6 mb-8">
+      <h3 class="text-cyan-600 font-semibold mb-3 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Dicas para melhores resultados:
+      </h3>
+      <ul class="text-gray-700 space-y-2 text-sm">
+        <li>• Use roupas justas ou trajes de banho para melhor avaliação</li>
+        <li>• Mantenha boa iluminação e fundo neutro</li>
+        <li>• Fique em posição natural e relaxada</li>
+        <li>• Tire as fotos de corpo inteiro</li>
+        <li>• Tente usar o mesmo local e horário para facilitar a comparação</li>
+      </ul>
+    </div>
+
+    <div data-controller="evaluation-upload" data-evaluation-upload-max-photos-value="3">
+      <%= form_with url: student_evaluation_media_path, multipart: true, local: true, class: "space-y-6" do |f| %>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Frontal Photo Card -->
+        <div class="bg-white rounded-lg shadow-sm p-6 photo-upload-card">
+          <h4 class="text-xl font-bold text-center mb-2">Foto Frontal</h4>
+          <p class="text-sm text-gray-600 text-center mb-6">Vista de frente, braços ao lado do corpo</p>
+
+          <div class="relative border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 min-h-[300px]">
+            <input type="file"
+                   name="evaluation_media[0][file]"
+                   accept="image/*"
+                   class="file-input absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+            <input type="hidden"
+                   name="evaluation_media[0][media_type]"
+                   value="photo">
+            <input type="hidden"
+                   name="evaluation_media[0][category]"
+                   value="frontal">
+            <input type="hidden"
+                   name="evaluation_media[0][description]"
+                   value="Foto Frontal">
+
+            <div class="file-drop-content absolute inset-0 flex flex-col items-center justify-center p-8 pointer-events-none">
+              <svg class="h-16 w-16 text-cyan-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <p class="text-gray-600 text-sm text-center mb-4">Clique para enviar ou arraste<br>sua foto aqui</p>
+              <div class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm inline-flex items-center gap-2 pointer-events-auto shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Selecionar Foto
+              </div>
+            </div>
+
+            <div class="file-preview hidden absolute inset-0">
+              <img class="preview-image w-full h-full object-cover" src="" alt="Foto Frontal">
+              <div class="absolute top-2 right-2">
+                <button type="button" class="remove-file-btn w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg z-30">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="absolute bottom-2 right-2">
+                <div class="w-10 h-10 bg-cyan-400 text-white rounded-full flex items-center justify-center shadow-lg">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Lateral Photo Card -->
+        <div class="bg-white rounded-lg shadow-sm p-6 photo-upload-card">
+          <h4 class="text-xl font-bold text-center mb-2">Foto Lateral</h4>
+          <p class="text-sm text-gray-600 text-center mb-6">Vista de perfil (lado direito ou esquerdo)</p>
+
+          <div class="relative border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 min-h-[300px]">
+            <input type="file"
+                   name="evaluation_media[1][file]"
+                   accept="image/*"
+                   class="file-input absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+            <input type="hidden"
+                   name="evaluation_media[1][media_type]"
+                   value="photo">
+            <input type="hidden"
+                   name="evaluation_media[1][category]"
+                   value="lateral">
+            <input type="hidden"
+                   name="evaluation_media[1][description]"
+                   value="Foto Lateral">
+
+            <div class="file-drop-content absolute inset-0 flex flex-col items-center justify-center p-8 pointer-events-none">
+              <svg class="h-16 w-16 text-cyan-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <p class="text-gray-600 text-sm text-center mb-4">Clique para enviar ou arraste<br>sua foto aqui</p>
+              <div class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm inline-flex items-center gap-2 pointer-events-auto shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Selecionar Foto
+              </div>
+            </div>
+
+            <div class="file-preview hidden absolute inset-0">
+              <img class="preview-image w-full h-full object-cover" src="" alt="Foto Lateral">
+              <div class="absolute top-2 right-2">
+                <button type="button" class="remove-file-btn w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg z-30">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="absolute bottom-2 right-2">
+                <div class="w-10 h-10 bg-cyan-400 text-white rounded-full flex items-center justify-center shadow-lg">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Posterior Photo Card -->
+        <div class="bg-white rounded-lg shadow-sm p-6 photo-upload-card">
+          <h4 class="text-xl font-bold text-center mb-2">Foto Posterior</h4>
+          <p class="text-sm text-gray-600 text-center mb-6">Vista de costas, posição natural</p>
+
+          <div class="relative border-2 border-dashed border-gray-300 rounded-lg overflow-hidden bg-gray-50 min-h-[300px]">
+            <input type="file"
+                   name="evaluation_media[2][file]"
+                   accept="image/*"
+                   class="file-input absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+            <input type="hidden"
+                   name="evaluation_media[2][media_type]"
+                   value="photo">
+            <input type="hidden"
+                   name="evaluation_media[2][category]"
+                   value="posterior">
+            <input type="hidden"
+                   name="evaluation_media[2][description]"
+                   value="Foto Posterior">
+
+            <div class="file-drop-content absolute inset-0 flex flex-col items-center justify-center p-8 pointer-events-none">
+              <svg class="h-16 w-16 text-cyan-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <p class="text-gray-600 text-sm text-center mb-4">Clique para enviar ou arraste<br>sua foto aqui</p>
+              <div class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm inline-flex items-center gap-2 pointer-events-auto shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Selecionar Foto
+              </div>
+            </div>
+
+            <div class="file-preview hidden absolute inset-0">
+              <img class="preview-image w-full h-full object-cover" src="" alt="Foto Posterior">
+              <div class="absolute top-2 right-2">
+                <button type="button" class="remove-file-btn w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg z-30">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="absolute bottom-2 right-2">
+                <div class="w-10 h-10 bg-cyan-400 text-white rounded-full flex items-center justify-center shadow-lg">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-gray-700 font-medium">Progresso: <span id="evaluation-photos-uploaded">0</span> de 3 fotos enviadas</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div id="evaluation-progress-bar" class="bg-cyan-400 h-2 rounded-full transition-all duration-300 w-0" style="--progress-width: 0%"></div>
+        </div>
+      </div>
+
+
+      <div class="flex justify-end gap-3 pt-4">
+        <%= link_to "Cancelar",
+          student_dashboard_path(tab: "evaluation"),
+          class: "px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+        %>
+        <%= f.submit "Enviar Fotos",
+          data: { 'evaluation-upload-target': 'submitBtn' },
+          disabled: true,
+          class: "px-6 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  #evaluation-progress-bar {
+    width: var(--progress-width, 0%);
+  }
+</style>

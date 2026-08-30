@@ -1,0 +1,124 @@
+<div class="min-h-screen bg-slate-50" data-controller="signup-cleanup">
+  <div class="max-w-7xl mx-auto p-2 sm:p-4 lg:p-6">
+    
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-4">
+        
+        <div class="relative" data-controller="dropdown">
+          <button data-action="click->dropdown#toggle"
+                  class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span class="hidden sm:inline">Configurações</span>
+          </button>
+
+          <div data-dropdown-target="menu"
+               class="hidden absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <div class="py-1">
+              <%= link_to student_edit_profile_path, class: "flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors" do %>
+                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                Editar Perfil
+              <% end %>
+              <%= link_to student_edit_password_path, class: "flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors" do %>
+                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                </svg>
+                Alterar Senha
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="flex-1 text-center">
+          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            <%= welcome_message(@current_user, @profile, @anamnese) %>
+          </h1>
+          <p class="text-gray-600">
+            Seu plano personalizado de treino e nutrição
+          </p>
+        </div>
+
+        
+        <div class="flex items-center gap-3">
+          <%= render 'shared/notifications_panel' %>
+
+          <%= button_to logout_path, method: :delete, form_class: "inline-block", class: "flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium cursor-pointer border-0" do %>
+            <%= icon :logout %>
+            Sair
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="mb-6" data-controller="subscription-timer"
+         data-subscription-timer-start-date-value="<%= @profile&.start_date || @profile&.created_at&.to_date || Date.current %>"
+         data-subscription-timer-expires-at-value="<%= @profile&.expires_at || 6.months.from_now.to_date %>"
+         data-subscription-timer-is-active-value="<%= @profile&.active? || true %>">
+      <%= render 'subscription_timer' %>
+    </div>
+
+    
+    <div data-controller="tabs" data-tabs-default-value="training" data-tabs-storage-key-value="studentDashboardActiveTab">
+      
+      <div class="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b pb-3 mb-6">
+        <div class="flex gap-1 bg-gray-100 p-1 rounded-none overflow-x-auto flex-wrap w-full" role="tablist">
+          <button class="tab-button flex-1" data-tabs-target="button" data-tab="training" data-action="click->tabs#switch" aria-label="Treinos e Exercícios">
+            <%= icon :training, size: "w-4 h-4" %>
+            <span class="hidden sm:inline">Treino</span>
+          </button>
+
+          <button class="tab-button flex-1" data-tabs-target="button" data-tab="nutrition" data-action="click->tabs#switch" aria-label="Plano Nutricional">
+            <%= icon :nutrition, size: "w-4 h-4" %>
+            <span class="hidden sm:inline">Nutrição</span>
+          </button>
+
+          <% unless Rails.env.production? %>
+            <button class="tab-button flex-1" data-tabs-target="button" data-tab="goals" data-action="click->tabs#switch" aria-label="Metas e Objetivos">
+              <%= icon :goals, size: "w-4 h-4" %>
+              <span class="hidden sm:inline">Metas</span>
+            </button>
+          <% end %>
+
+          <button class="tab-button flex-1" data-tabs-target="button" data-tab="evaluation" data-action="click->tabs#switch" aria-label="Avaliação Física">
+            <%= icon :evaluation, size: "w-4 h-4" %>
+            <span class="hidden sm:inline">Avaliação</span>
+          </button>
+
+          <button class="tab-button flex-1" data-tabs-target="button" data-tab="shop" data-action="click->tabs#switch" aria-label="Loja EBNA">
+            <%= icon :shop, size: "w-4 h-4" %>
+            <span class="hidden sm:inline">Shop</span>
+          </button>
+        </div>
+      </div>
+
+
+      <div class="tab-panel hidden" data-tabs-target="panel" data-tab="training">
+        <%= render 'training_tab' %>
+      </div>
+
+      <div class="tab-panel hidden" data-tabs-target="panel" data-tab="nutrition">
+        <%= render 'nutrition_tab' %>
+      </div>
+
+      <% unless Rails.env.production? %>
+        <div class="tab-panel hidden" data-tabs-target="panel" data-tab="goals">
+          <%= render 'goals_tab' %>
+        </div>
+      <% end %>
+
+      <div class="tab-panel hidden" data-tabs-target="panel" data-tab="evaluation">
+        <%= render 'evaluation_tab' %>
+      </div>
+
+      <div class="tab-panel hidden" data-tabs-target="panel" data-tab="shop">
+        <%= render 'shop_tab' %>
+      </div>
+    </div>
+  </div>
+</div>

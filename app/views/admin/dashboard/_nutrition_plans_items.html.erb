@@ -1,0 +1,90 @@
+<div class="space-y-4">
+  <% nutrition_plans.each do |plan| %>
+    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-search-target="item">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-2">
+            <h4 class="text-lg font-semibold text-gray-900"><%= plan.name %></h4>
+            <% if plan.active %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Ativo
+              </span>
+            <% else %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                Inativo
+              </span>
+            <% end %>
+          </div>
+
+          <p class="text-sm text-gray-600 mb-2">
+            <span class="font-medium">Aluno:</span> <%= plan.student_profile.name %>
+          </p>
+
+          <% if plan.description.present? %>
+            <p class="text-sm text-gray-600 mb-3"><%= plan.description %></p>
+          <% end %>
+
+          <div class="flex items-center gap-4 text-sm text-gray-600">
+            <span class="inline-flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <%= plan.meals.count %> refeições
+            </span>
+            <span class="inline-flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <%= plan.meals.sum { |m| m.total_calories }.round %> kcal/dia
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <%= link_to student_nutrition_plan_path(plan), target: "_blank", class: "p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+          <% end %>
+
+          <%= link_to edit_admin_nutrition_plan_path(plan), class: "p-2 text-gray-600 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition-colors" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+          <% end %>
+
+          <%= button_to toggle_active_admin_nutrition_plan_path(plan), method: :patch, form: { data: { turbo: false }, class: "inline-block" }, class: "p-2 #{plan.active ? 'text-green-600 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-50'} rounded-lg transition-colors" do %>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          <% end %>
+
+          <button type="button"
+              class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              data-action="click->delete-modal#open"
+              data-item-name="<%= plan.name %>"
+              data-item-type="plano nutricional"
+              data-delete-path="<%= admin_nutrition_plan_path(plan) %>">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Meals Preview -->
+      <% if plan.meals.any? %>
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <p class="text-xs font-medium text-gray-700 mb-2">Refeições:</p>
+          <div class="flex flex-wrap gap-2">
+            <% plan.meals.each do |meal| %>
+              <span class="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full border border-blue-200">
+                <%= meal.meal_type.titleize %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

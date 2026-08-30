@@ -1,0 +1,227 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto p-2 sm:p-4 lg:p-6">
+    
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-4">
+          <%= link_to admin_dashboard_path, class: "text-gray-600 hover:text-gray-900" do %>
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          <% end %>
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">CRIADOR DE TREINOS</h1>
+            <p class="text-gray-600 mt-1">Crie e gerencie treinos personalizados para seus alunos</p>
+          </div>
+        </div>
+        <%= link_to new_admin_training_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center gap-2" do %>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Novo Treino
+        <% end %>
+      </div>
+    </div>
+
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-cyan-100 rounded-lg">
+            <svg class="h-6 w-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-cyan-600"><%= @students.count %></div>
+            <div class="text-sm text-gray-600">Total Alunos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-green-100 rounded-lg">
+            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-green-600"><%= @trainings.count %></div>
+            <div class="text-sm text-gray-600">Treinos Criados</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-100 rounded-lg">
+            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-blue-600"><%= @trainings.where(active: true).count %></div>
+            <div class="text-sm text-gray-600">Treinos Ativos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-purple-100 rounded-lg">
+            <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-purple-600"><%= @trainings.sum(&:total_exercises) %></div>
+            <div class="text-sm text-gray-600">Total Exercícios</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-xl font-bold text-gray-900">Treinos Cadastrados</h3>
+      </div>
+
+      <% if @trainings.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aluno</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Treino</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dia</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exercícios</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @trainings.each do |training| %>
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="font-medium text-gray-900"><%= training.student_profile.name %></div>
+                    <div class="text-sm text-gray-500"><%= training.student_profile.user.email_address %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="font-medium text-gray-900"><%= training.name %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 py-1 text-xs font-medium bg-cyan-100 text-cyan-700 rounded-full">
+                      Treino <%= training.day %>
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <%= training.total_exercises %> exercícios
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <% if training.active? %>
+                      <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+                    <% else %>
+                      <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Inativo</span>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <div class="flex items-center gap-2">
+                      <%= button_to toggle_active_admin_training_path(training),
+                          method: :patch,
+                          class: "px-3 py-1 border #{training.active? ? 'border-gray-300 text-gray-700' : 'border-green-500 text-green-600'} rounded-lg hover:bg-gray-50 transition-colors" do %>
+                        <% if training.active? %>
+                          Desativar
+                        <% else %>
+                          Ativar
+                        <% end %>
+                      <% end %>
+
+                      <%= link_to edit_admin_training_path(training),
+                          class: "px-3 py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+                        Editar
+                      <% end %>
+
+                      <%= button_to admin_training_path(training),
+                          method: :delete,
+                          data: { turbo_confirm: "Tem certeza que deseja remover este treino?" },
+                          class: "px-3 py-1 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors" do %>
+                        Excluir
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <% if @trainings.total_pages > 1 %>
+          <div class="p-4 border-t border-gray-200">
+            <div class="flex items-center justify-between">
+              <div class="text-sm text-gray-600">
+                Mostrando <%= @trainings.offset_value + 1 %>-<%= [@trainings.offset_value + @trainings.length, @trainings.total_count].min %> de <%= @trainings.total_count %> treinos
+              </div>
+              <div class="flex gap-2">
+                <% if @trainings.prev_page %>
+                  <%= link_to admin_trainings_path(page: @trainings.prev_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                  <% end %>
+                <% else %>
+                  <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                  </span>
+                <% end %>
+
+                <% @trainings.total_pages.times do |i| %>
+                  <% page_num = i + 1 %>
+                  <% if (page_num - @trainings.current_page).abs <= 2 || page_num == 1 || page_num == @trainings.total_pages %>
+                    <%= link_to admin_trainings_path(page: page_num),
+                        class: "px-3 py-2 border rounded-lg transition-colors #{page_num == @trainings.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+                      <%= page_num %>
+                    <% end %>
+                  <% elsif (page_num - @trainings.current_page).abs == 3 %>
+                    <span class="px-3 py-2 text-gray-400">...</span>
+                  <% end %>
+                <% end %>
+
+                <% if @trainings.next_page %>
+                  <%= link_to admin_trainings_path(page: @trainings.next_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  <% end %>
+                <% else %>
+                  <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="p-8 text-center">
+          <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+          </svg>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum treino cadastrado</h3>
+          <p class="text-gray-600 mb-4">Comece criando seu primeiro treino</p>
+          <%= link_to new_admin_training_path, class: "inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors" do %>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Criar Primeiro Treino
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

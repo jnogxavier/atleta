@@ -1,0 +1,75 @@
+<div class="meal-item bg-white border border-gray-200 rounded-lg p-6" data-meal-index="<%= @meal_index %>">
+  <input type="hidden" name="nutrition_plan[meals_attributes][<%= @meal_index %>][_destroy]" class="destroy-field" value="0">
+
+  <div class="flex items-center justify-between mb-4">
+    <h4 class="text-lg font-semibold flex items-center gap-2">
+      <svg class="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Criar Refeição
+    </h4>
+    <button type="button"
+            data-action="click->nutrition-plan-form#removeMeal"
+            class="remove-meal-btn text-red-600 hover:text-red-800 p-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div>
+      <label for="nutrition_plan_meals_attributes_<%= @meal_index %>_meal_type" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Refeição</label>
+      <select name="nutrition_plan[meals_attributes][<%= @meal_index %>][meal_type]" id="nutrition_plan_meals_attributes_<%= @meal_index %>_meal_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500">
+        <option value="cafe_da_manha">Café da Manhã</option>
+        <option value="lanche">Lanche</option>
+        <option value="almoco">Almoço</option>
+        <option value="cafe_da_tarde">Café da Tarde</option>
+        <option value="jantar">Jantar</option>
+        <option value="ceia">Ceia</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="nutrition_plan_meals_attributes_<%= @meal_index %>_meal_time" class="block text-sm font-medium text-gray-700 mb-2">
+        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Horário
+      </label>
+      <input type="time" name="nutrition_plan[meals_attributes][<%= @meal_index %>][meal_time]" id="nutrition_plan_meals_attributes_<%= @meal_index %>_meal_time" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500">
+    </div>
+
+    <div>
+      <label for="nutrition_plan_meals_attributes_<%= @meal_index %>_observations" class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+      <input type="text" name="nutrition_plan[meals_attributes][<%= @meal_index %>][observations]" id="nutrition_plan_meals_attributes_<%= @meal_index %>_observations" placeholder="Ex: Pré-treino" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500">
+    </div>
+  </div>
+
+  <div class="border-t border-gray-200 pt-4">
+    <div class="flex items-center justify-between mb-3">
+      <h5 class="text-sm font-semibold text-gray-700">Alimentos</h5>
+      <div class="flex gap-2">
+        <button type="button"
+                data-action="click->nutrition-plan-form#addFood"
+                class="add-food-btn px-3 py-1.5 bg-cyan-50 text-cyan-700 rounded text-sm font-medium hover:bg-cyan-100 flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Adicionar Alimento
+        </button>
+        <button type="button"
+                data-action="click->food-form-modal#open"
+                class="px-3 py-1.5 bg-green-50 text-green-700 rounded text-sm font-medium hover:bg-green-100 flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Criar/Editar Alimento
+        </button>
+      </div>
+    </div>
+
+    <div class="foods-container space-y-2">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<%= card do %>
+  <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="text-center md:text-left">
+      <h3 class="text-lg font-semibold text-gray-900 mb-1">Status da Assinatura</h3>
+      <p class="text-sm text-gray-600">
+        Plano: <span class="font-medium <%= @profile&.plan ? 'text-cyan-600' : 'text-gray-400' %>"><%= @profile&.plan || 'Nenhum' %></span>
+      </p>
+    </div>
+
+    <% if @profile&.expires_at %>
+      <% days_remaining = (@profile.expires_at - Date.current).to_i %>
+      <% total_days = (@profile.expires_at - (@profile.start_date || @profile.created_at.to_date)).to_i %>
+      <% progress_percent = [(((total_days - days_remaining).to_f / total_days) * 100).to_i, 100].min %>
+
+      <div class="flex-1 max-w-md">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm font-medium text-gray-700">
+            <%= days_remaining %> dias restantes
+          </span>
+          <span class="text-sm text-gray-500">
+            <%= l(@profile.expires_at) %>
+          </span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div class="bg-gradient-to-r from-cyan-400 to-cyan-600 h-3 rounded-full transition-all duration-300 <%= progress_width_class(progress_percent) %>"></div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <% if @profile.currently_active? %>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Ativo
+          </span>
+        <% elsif @profile.expired? %>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Expirado
+          </span>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-600">Sem data de expiração definida</p>
+    <% end %>
+  </div>
+<% end %>

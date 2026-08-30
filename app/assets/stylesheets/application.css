@@ -1,0 +1,335 @@
+.flash-messages {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 24rem;
+}
+
+.flash-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.flash-message p {
+  margin: 0;
+  flex: 1;
+}
+
+.flash-close {
+  margin-left: 1rem;
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.flash-close:hover {
+  opacity: 1;
+}
+
+.flash-notice {
+  background-color: #d1fae5;
+  border-left: 4px solid #10b981;
+  color: #065f46;
+}
+
+.flash-alert {
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+}
+
+.flash-error {
+  background-color: #fee2e2;
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+}
+
+.flash-success {
+  background-color: #d1fae5;
+  border-left: 4px solid #10b981;
+  color: #065f46;
+}
+
+.flash-warning {
+  background-color: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  color: #92400e;
+}
+
+.tab-navigation {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  background-color: transparent;
+  color: #4b5563;
+  border: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  background-color: #e5e7eb;
+}
+
+.tab-button.active {
+  background-color: #22d3ee !important;
+  color: white !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.tab-button.active:hover {
+  background-color: #06b6d4 !important;
+}
+
+@media (min-width: 640px) {
+  .tab-button {
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+.sub-tab-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  background-color: transparent;
+  color: #4b5563;
+  border: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.sub-tab-button:hover {
+  background-color: #e5e7eb;
+}
+
+.sub-tab-button.active {
+  background-color: #22d3ee !important;
+  color: white !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.sub-tab-button.active:hover {
+  background-color: #06b6d4 !important;
+}
+
+@media (min-width: 640px) {
+  .sub-tab-button {
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel:not(.hidden) {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-panel.active {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* Global button cursor styles - must override Tailwind */
+button,
+[type="button"],
+[type="submit"],
+[role="button"],
+a[role="button"],
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+button:disabled,
+[type="button"]:disabled,
+[type="submit"]:disabled {
+  cursor: not-allowed !important;
+}
+
+/* Tailwind reset override */
+* button,
+* [type="button"],
+* [type="submit"] {
+  cursor: pointer !important;
+}
+
+/* Admin Dashboard Styles */
+.admin-dashboard {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.admin-info {
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.users-section {
+  margin: 2rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #333;
+  color: white;
+  font-weight: bold;
+}
+
+tr:hover {
+  background: #f9f9f9;
+}
+
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.role-badge.admin {
+  background: #ff6b6b;
+  color: white;
+}
+
+.role-badge.user {
+  background: #4dabf7;
+  color: white;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background: #4dabf7;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.button.secondary {
+  background: #868e96;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+/* Login page background */
+.login-background {
+  background-image: linear-gradient(160deg, #0f172a 0%, #134e5a 55%, #0891b2 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 15%;
+}

@@ -1,0 +1,47 @@
+<%#
+  Placeholder terms. This is sample copy so the registration flow is complete and
+  demonstrable -- it is not legal advice and is not fit for production use.
+  Replace the clauses below with terms drafted for your own organisation.
+%>
+<div class="space-y-6">
+  <div class="text-center space-y-4">
+    <div class="w-16 h-16 bg-cyan-50 rounded-full flex items-center justify-center mx-auto">
+      <svg class="w-10 h-10 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+    </div>
+    <h2 class="text-2xl font-bold text-gray-900">TERMO DE ACEITE E RESPONSABILIDADE</h2>
+    <p class="text-lg font-semibold text-gray-800">PORTAL DO ALUNO</p>
+    <p class="text-gray-600">Antes de acessar a plataforma, leia atentamente as cláusulas abaixo. O aceite é obrigatório para continuar.</p>
+  </div>
+
+  <div class="space-y-4 max-h-96 overflow-y-auto pr-2">
+    <% [
+      [ "1. Objeto", "Este termo regula o uso da plataforma para acompanhamento de treinos e planos alimentares prescritos por profissionais habilitados." ],
+      [ "2. Prescrição Profissional", "Toda prescrição técnica é de responsabilidade dos profissionais legalmente habilitados (CREF e CRN) responsáveis pelo atendimento. A plataforma é apenas o meio de entrega." ],
+      [ "3. Dados de Saúde", "Os dados informados na anamnese são dados pessoais sensíveis nos termos da LGPD e são tratados exclusivamente para a finalidade do acompanhamento contratado." ],
+      [ "4. Conta e Acesso", "O acesso é pessoal e intransferível. O aluno é responsável por manter a confidencialidade das suas credenciais." ],
+      [ "5. Condições de Saúde", "O aluno declara ter informado corretamente suas condições de saúde, lesões e restrições, e compromete-se a manter essas informações atualizadas." ]
+    ].each do |title, body| %>
+      <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+        <svg class="w-6 h-6 text-cyan-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <div>
+          <h3 class="font-semibold text-black mb-2"><%= title %></h3>
+          <p class="text-sm text-gray-700"><%= body %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex items-center p-4 rounded-lg bg-white terms-checkbox-container">
+    <%= form.check_box :terms_accepted,
+        class: "h-5 w-5 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded cursor-pointer mr-3",
+        id: "user_terms_accepted" %>
+    <%= form.label :terms_accepted,
+        "Declaro que li, compreendi e aceito integralmente os termos acima.",
+        class: "text-sm font-medium text-black cursor-pointer flex-1",
+        for: "user_terms_accepted" %>
+  </div>
+</div>

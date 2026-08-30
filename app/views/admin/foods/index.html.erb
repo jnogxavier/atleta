@@ -1,0 +1,72 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Gerenciar Alimentos</h1>
+      <p class="text-gray-600 mt-1">Adicione, edite ou remova alimentos da base de dados</p>
+    </div>
+    <%= link_to new_admin_food_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-all flex items-center gap-2" do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      Novo Alimento
+    <% end %>
+  </div>
+
+  <% if @foods.any? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Nome</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Categoria</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Energia (kcal)</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Proteína (g)</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Carboidratos (g)</th>
+            <th class="px-6 py-3 text-right text-sm font-semibold text-gray-900">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <% @foods.each do |food| %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 text-sm font-medium text-gray-900"><%= food.name %></td>
+              <td class="px-6 py-4 text-sm text-gray-600"><%= food.category %></td>
+              <td class="px-6 py-4 text-sm text-gray-600"><%= food.energy_kcal %></td>
+              <td class="px-6 py-4 text-sm text-gray-600"><%= food.protein_g %></td>
+              <td class="px-6 py-4 text-sm text-gray-600"><%= food.carbohydrate_g || "—" %></td>
+              <td class="px-6 py-4 text-right text-sm">
+                <div class="flex gap-2 justify-end">
+                  <%= link_to "Editar", edit_admin_food_path(food), class: "px-3 py-1.5 bg-blue-50 text-blue-700 rounded text-xs font-medium hover:bg-blue-100" %>
+                  <%= link_to "Remover", admin_food_path(food), method: :delete, data: { turbo_confirm: "Tem certeza que deseja remover #{food.name}? Esta ação não pode ser desfeita." }, class: "px-3 py-1.5 bg-red-50 text-red-700 rounded text-xs font-medium hover:bg-red-100" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @foods.total_pages > 1 %>
+      <div class="flex justify-center gap-2">
+        <% @foods.total_pages.times do |i| %>
+          <% page_num = i + 1 %>
+          <% if page_num == @foods.current_page %>
+            <span class="px-3 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium">
+              <%= page_num %>
+            </span>
+          <% else %>
+            <%= link_to page_num, admin_foods_path(page: page_num), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+      <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+      </svg>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum alimento cadastrado</h3>
+      <p class="text-gray-600 mb-4">Comece criando o primeiro alimento para sua base de dados</p>
+      <%= link_to "Criar Primeiro Alimento", new_admin_food_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 inline-flex items-center gap-2" %>
+    </div>
+  <% end %>
+</div>

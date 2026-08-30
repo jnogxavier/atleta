@@ -1,0 +1,41 @@
+<%
+# Empty state component for when there's no data to display
+# Usage:
+#   <%= render 'shared/empty_state', title: 'No trainings yet', description: 'Create your first training to get started', icon: 'dumbbell' %>
+#
+# Parameters:
+#   - title: (required) The main heading text
+#   - description: (optional) Additional descriptive text
+#   - icon: (optional) Icon name from icon_helper (default: 'empty')
+#   - action_text: (optional) Text for the action button
+#   - action_url: (optional) URL for the action button
+#   - action_method: (optional) HTTP method for action (default: 'get')
+
+description ||= nil
+icon ||= 'empty'
+action_text ||= nil
+action_url ||= nil
+action_method ||= 'get'
+%>
+
+<div class="text-center py-12 px-4">
+  <div class="mx-auto h-24 w-24 text-gray-400 mb-4">
+    <%= icon(icon, class: 'h-full w-full') %>
+  </div>
+
+  <h3 class="text-lg font-medium text-gray-900 mb-2">
+    <%= title %>
+  </h3>
+
+  <% if description %>
+    <p class="text-gray-500 mb-6 max-w-md mx-auto">
+      <%= description %>
+    </p>
+  <% end %>
+
+  <% if action_text && action_url %>
+    <%= link_to action_text, action_url,
+        method: action_method,
+        class: "inline-flex items-center px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors" %>
+  <% end %>
+</div>

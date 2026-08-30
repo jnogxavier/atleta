@@ -1,0 +1,265 @@
+<div class="space-y-8">
+  
+  <div class="text-center">
+    <h2 class="text-4xl font-bold text-gray-900 mb-3">GESTÃO FINANCEIRA</h2>
+    <p class="text-lg text-gray-600">Dashboard completo de alunos, receitas e estratégias</p>
+    <div class="w-20 h-1 bg-gradient-to-r from-cyan-500 to-cyan-600 mx-auto mt-4 rounded-full"></div>
+  </div>
+
+  
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    
+    <div class="bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Total Alunos</h3>
+        <svg class="h-4 w-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </div>
+      <div class="text-2xl font-bold text-cyan-600"><%= StudentProfile.active.count %></div>
+      <p class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+        <svg class="h-3 w-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+        </svg>
+        Alunos ativos
+      </p>
+    </div>
+
+    
+    <div class="bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/20 rounded-lg p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Receita Total</h3>
+        <svg class="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <div class="text-2xl font-bold text-green-600">
+        <%= number_to_currency(StudentProfile.active.sum(:value), unit: "R$ ", separator: ",", delimiter: ".") %>
+      </div>
+      <p class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+        <svg class="h-3 w-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        De <%= StudentProfile.active.count %> alunos ativos
+      </p>
+    </div>
+
+    
+    <div class="bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 border border-yellow-500/20 rounded-lg p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Vencimentos</h3>
+        <svg class="h-4 w-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+      </div>
+      <div class="text-2xl font-bold text-yellow-600">
+        <%= StudentProfile.active.where('expires_at <= ?', 15.days.from_now).count %>
+      </div>
+      <p class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+        <svg class="h-3 w-3 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        Próximos 15 dias
+      </p>
+    </div>
+
+    
+    <div class="bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/20 rounded-lg p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Anamneses</h3>
+        <svg class="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+      </div>
+      <div class="text-2xl font-bold text-blue-600"><%= Anamnese.count %></div>
+      <p class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+        <svg class="h-3 w-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <% student_count = StudentProfile.count %>
+        <% completion_percentage = student_count > 0 ? ((Anamnese.count.to_f / student_count.to_f) * 100).round : 0 %>
+        <%= completion_percentage %>% concluídas
+      </p>
+    </div>
+  </div>
+
+  
+  <% if @notifications.any? %>
+    <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-lg p-6 shadow-sm">
+      <h3 class="text-lg font-semibold text-blue-700 mb-4 flex items-center gap-2">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+        </svg>
+        Notificações (<%= @notifications.count %>)
+      </h3>
+      <div class="space-y-2">
+        <% @notifications.each do |notification| %>
+          <div class="flex items-start gap-3 p-3 bg-white rounded-lg border border-blue-200 relative">
+            <div class="flex-shrink-0 mt-1">
+              <% if notification.notification_type == 'expiration' %>
+                <svg class="h-5 w-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+              <% elsif notification.notification_type == 'warning' %>
+                <svg class="h-5 w-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+              <% else %>
+                <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              <% end %>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium text-sm text-gray-900"><%= notification.title %></p>
+              <p class="text-xs text-gray-600 mt-1"><%= notification.message %></p>
+              <p class="text-xs text-gray-400 mt-1"><%= time_ago_in_words(notification.created_at) %> atrás</p>
+            </div>
+            <%= button_to mark_as_read_admin_notification_path(notification), method: :patch, class: "absolute top-2 right-2 text-gray-400 hover:text-gray-600" do %>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  
+  <%
+    expiring_soon = StudentProfile.active
+      .where('expires_at IS NOT NULL')
+      .where('expires_at <= ?', 15.days.from_now)
+      .where('expires_at > ?', Date.current)
+      .order(expires_at: :asc)
+      .limit(5)
+  %>
+
+  <% if expiring_soon.any? %>
+    <div class="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg p-6 shadow-sm">
+      <h3 class="text-lg font-semibold text-yellow-700 mb-4 flex items-center gap-2">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        Alertas de Renovação
+      </h3>
+      <div class="space-y-2">
+        <% expiring_soon.each do |profile| %>
+          <% days_until_expiration = (profile.expires_at - Date.current).to_i %>
+          <div class="flex items-center justify-between p-3 <%= days_until_expiration <= 7 ? 'bg-orange-50 border-orange-200' : 'bg-yellow-50 border-yellow-200' %> rounded-lg border">
+            <div>
+              <p class="font-medium text-sm text-gray-900"><%= profile.name %></p>
+              <p class="text-xs text-gray-600">
+                Vence em <%= days_until_expiration %> <%= days_until_expiration == 1 ? 'dia' : 'dias' %>
+                (<%= l(profile.expires_at) %>)
+              </p>
+            </div>
+            <button class="px-3 py-1 border <%= days_until_expiration <= 7 ? 'border-orange-500 text-orange-700 hover:bg-orange-50' : 'border-yellow-500 text-yellow-700 hover:bg-yellow-50' %> rounded-lg text-sm font-medium transition-colors">
+              Contactar
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="p-6 border-b border-gray-200">
+      <h3 class="text-xl font-bold text-gray-900">GESTÃO DE ALUNOS</h3>
+      <p class="text-sm text-gray-600 mt-1">Controle completo de pagamentos e entregas</p>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Aluno</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plano</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimento</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anamnese</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Treino</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% StudentProfile.active.includes(user: :anamnese, trainings: []).order(created_at: :desc).each do |profile| %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="font-medium text-gray-900"><%= profile.name %></div>
+                <div class="text-sm text-gray-500"><%= profile.user.email_address %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                  <%= profile.plan || 'Não definido' %>
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">
+                  <%= number_to_currency(profile.value || 0, unit: "R$ ", separator: ",", delimiter: ".") %>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if profile.expires_at %>
+                  <div class="text-sm font-medium text-gray-900"><%= l(profile.expires_at) %></div>
+                  <% days_left = (profile.expires_at - Date.current).to_i %>
+                  <div class="text-xs <%= days_left <= 7 ? 'text-red-600' : days_left <= 15 ? 'text-yellow-600' : 'text-gray-500' %>">
+                    <%= days_left %> <%= days_left == 1 ? 'dia' : 'dias' %> restantes
+                  </div>
+                <% else %>
+                  <span class="text-sm text-gray-400">Não definido</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if profile.currently_active? %>
+                  <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+                <% elsif profile.expired? %>
+                  <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full">Expirado</span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"><%= profile.status.titleize %></span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if profile.user.anamnese.present? %>
+                  <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Entregue</span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pendente</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if profile.trainings.active_trainings.any? %>
+                  <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                    <%= profile.trainings.active_trainings.count %> treino(s)
+                  </span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full">Pendente</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <%= link_to edit_admin_student_path(profile), class: "text-cyan-600 hover:text-cyan-900" do %>
+                  <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  
+  <% unless Rails.env.production? %>
+    <div class="flex flex-wrap gap-4">
+      <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center gap-2">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        Exportar Relatório
+      </button>
+    </div>
+  <% end %>
+</div>

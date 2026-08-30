@@ -1,0 +1,88 @@
+<% if nutrition_plans.total_pages > 1 %>
+  <div class="flex gap-2">
+    <% is_search = defined?(search_query) && search_query.present? %>
+    <% if is_search %>
+      <% search_params = { search: search_query } %>
+      <% if nutrition_plans.prev_page %>
+        <%= link_to search_admin_nutrition_plans_path(search_params.merge(page: nutrition_plans.prev_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        <% end %>
+      <% else %>
+        <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </span>
+      <% end %>
+
+      <% nutrition_plans.total_pages.times do |i| %>
+        <% page_num = i + 1 %>
+        <% if (page_num - nutrition_plans.current_page).abs <= 2 || page_num == 1 || page_num == nutrition_plans.total_pages %>
+          <%= link_to search_admin_nutrition_plans_path(search_params.merge(page: page_num)),
+              class: "px-3 py-2 border rounded-lg transition-colors #{page_num == nutrition_plans.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}", data: { action: "click->search#handlePaginationLink" } do %>
+            <%= page_num %>
+          <% end %>
+        <% elsif (page_num - nutrition_plans.current_page).abs == 3 %>
+          <span class="px-3 py-2 text-gray-400">...</span>
+        <% end %>
+      <% end %>
+
+      <% if nutrition_plans.next_page %>
+        <%= link_to search_admin_nutrition_plans_path(search_params.merge(page: nutrition_plans.next_page)), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        <% end %>
+      <% else %>
+        <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </span>
+      <% end %>
+    <% else %>
+      <!-- Non-search pagination -->
+      <% if nutrition_plans.prev_page %>
+        <%= link_to admin_dashboard_path(nutrition_page: nutrition_plans.prev_page, tab: 'nutrition'), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        <% end %>
+      <% else %>
+        <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </span>
+      <% end %>
+
+      <% nutrition_plans.total_pages.times do |i| %>
+        <% page_num = i + 1 %>
+        <% if (page_num - nutrition_plans.current_page).abs <= 2 || page_num == 1 || page_num == nutrition_plans.total_pages %>
+          <%= link_to admin_dashboard_path(nutrition_page: page_num, tab: 'nutrition'),
+              class: "px-3 py-2 border rounded-lg transition-colors #{page_num == nutrition_plans.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+            <%= page_num %>
+          <% end %>
+        <% elsif (page_num - nutrition_plans.current_page).abs == 3 %>
+          <span class="px-3 py-2 text-gray-400">...</span>
+        <% end %>
+      <% end %>
+
+      <% if nutrition_plans.next_page %>
+        <%= link_to admin_dashboard_path(nutrition_page: nutrition_plans.next_page, tab: 'nutrition'), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        <% end %>
+      <% else %>
+        <span class="px-3 py-2 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </span>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

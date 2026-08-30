@@ -1,0 +1,206 @@
+<%
+  # Calculate metrics
+  total_students = StudentProfile.count
+  active_students = StudentProfile.active.count
+  total_trainings = Training.count
+  active_trainings = Training.where(active: true).count
+  total_exercises = Training.sum(&:total_exercises)
+  students_with_anamnese = StudentProfile.joins(user: :anamnese).distinct.count
+  students_with_training = StudentProfile.joins(:trainings).where(trainings: { active: true }).distinct.count
+
+  # Growth metrics (last 30 days)
+  students_last_month = StudentProfile.where('created_at >= ?', 30.days.ago).count
+  trainings_last_month = Training.where('created_at >= ?', 30.days.ago).count
+
+  # Completion rates
+  anamnese_completion = total_students > 0 ? ((students_with_anamnese.to_f / total_students) * 100).round : 0
+  training_completion = total_students > 0 ? ((students_with_training.to_f / total_students) * 100).round : 0
+%>
+
+<div class="space-y-6">
+  <div class="text-center">
+    <h2 class="text-4xl font-bold text-gray-900 mb-3">MÉTRICAS E ANALYTICS</h2>
+    <p class="text-lg text-gray-600">Visão completa do desempenho e engajamento</p>
+    <div class="w-20 h-1 bg-gradient-to-r from-purple-500 to-purple-600 mx-auto mt-4 rounded-full"></div>
+  </div>
+
+  
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    
+    <div class="bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/20 rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Total Alunos</h3>
+        <svg class="h-4 w-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </div>
+      <div class="text-3xl font-bold text-cyan-600"><%= total_students %></div>
+      <p class="text-xs text-gray-500 mt-1">+<%= students_last_month %> este mês</p>
+    </div>
+
+    
+    <div class="bg-gradient-to-br from-green-500/20 to-green-500/5 border border-green-500/20 rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Taxa de Ativos</h3>
+        <svg class="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <div class="text-3xl font-bold text-green-600"><%= total_students > 0 ? ((active_students.to_f / total_students) * 100).round : 0 %>%</div>
+      <p class="text-xs text-gray-500 mt-1"><%= active_students %> de <%= total_students %> alunos</p>
+    </div>
+
+    
+    <div class="bg-gradient-to-br from-purple-500/20 to-purple-500/5 border border-purple-500/20 rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Treinos Ativos</h3>
+        <svg class="h-4 w-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+        </svg>
+      </div>
+      <div class="text-3xl font-bold text-purple-600"><%= active_trainings %></div>
+      <p class="text-xs text-gray-500 mt-1">+<%= trainings_last_month %> este mês</p>
+    </div>
+
+    
+    <div class="bg-gradient-to-br from-orange-500/20 to-orange-500/5 border border-orange-500/20 rounded-lg p-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-medium text-gray-600">Total Exercícios</h3>
+        <svg class="h-4 w-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+      </div>
+      <div class="text-3xl font-bold text-orange-600"><%= total_exercises %></div>
+      <p class="text-xs text-gray-500 mt-1">Em <%= total_trainings %> treinos</p>
+    </div>
+  </div>
+
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        Taxa de Conclusão - Anamnese
+      </h3>
+      <div class="relative pt-1">
+        <div class="flex mb-2 items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+              Progresso
+            </span>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-semibold inline-block text-blue-600">
+              <%= anamnese_completion %>%
+            </span>
+          </div>
+        </div>
+        <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-200">
+          <div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 <%= progress_width_class(anamnese_completion) %>"></div>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600"><%= students_with_anamnese %> de <%= total_students %> alunos completaram a anamnese</p>
+    </div>
+
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+        </svg>
+        Taxa de Atribuição - Treinos
+      </h3>
+      <div class="relative pt-1">
+        <div class="flex mb-2 items-center justify-between">
+          <div>
+            <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-purple-600 bg-purple-200">
+              Progresso
+            </span>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-semibold inline-block text-purple-600">
+              <%= training_completion %>%
+            </span>
+          </div>
+        </div>
+        <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-purple-200">
+          <div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500 <%= progress_width_class(training_completion) %>"></div>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600"><%= students_with_training %> de <%= total_students %> alunos têm treinos ativos</p>
+    </div>
+  </div>
+
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <svg class="h-5 w-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          Alunos Recentes
+        </h3>
+      </div>
+      <div class="p-6 space-y-3">
+        <% StudentProfile.order(created_at: :desc).limit(5).each do |student| %>
+          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div>
+              <p class="font-medium text-sm text-gray-900"><%= student.name %></p>
+              <p class="text-xs text-gray-600">Cadastrado <%= time_ago_in_words(student.created_at) %> atrás</p>
+            </div>
+            <% if student.currently_active? %>
+              <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+            <% else %>
+              <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Inativo</span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+          </svg>
+          Treinos Recentes
+        </h3>
+      </div>
+      <div class="p-6 space-y-3">
+        <% Training.includes(:student_profile).order(created_at: :desc).limit(5).each do |training| %>
+          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div>
+              <p class="font-medium text-sm text-gray-900"><%= training.name %></p>
+              <p class="text-xs text-gray-600"><%= training.student_profile.name %> • <%= training.total_exercises %> exercícios</p>
+            </div>
+            <% if training.active? %>
+              <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+            <% else %>
+              <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Inativo</span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-lg p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
+    <div class="flex flex-wrap gap-3">
+      <%= link_to new_admin_student_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center gap-2" do %>
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Novo Aluno
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="space-y-6">
+  <div class="text-center">
+    <h2 class="text-4xl font-bold text-gray-900 mb-3">BIBLIOTECA DE VÍDEOS</h2>
+    <p class="text-lg text-gray-600">Gerencie conteúdo em vídeo para seus alunos</p>
+    <div class="w-20 h-1 bg-gradient-to-r from-purple-500 to-purple-600 mx-auto mt-4 rounded-full"></div>
+  </div>
+
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+      <svg class="h-5 w-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+      Selecionar Aluno
+    </h3>
+
+    <%= form_with url: "#", method: :get, local: true, html: { data: { controller: "video-manager" } } do |f| %>
+      <div class="flex gap-3">
+        <%= f.select :student_id,
+            options_from_collection_for_select(StudentProfile.order(:name), :id, :name),
+            { prompt: "Escolha um aluno..." },
+            {
+              class: "flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent",
+              data: { action: "change->video-manager#selectStudent", video_manager_target: "studentSelect" }
+            } %>
+        <%= f.submit "Ver Biblioteca", class: "px-6 py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+
+  
+  <div class="hidden" data-video-manager-target="librarySection">
+    
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-purple-200 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Vídeos Sugeridos (clique para adicionar)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <% sample_videos = [
+          { title: 'Como executar Agachamento Livre', category: 'Técnica', url: 'https://www.youtube.com/watch?v=dS9NS1LcRRo', duration: '5:30' },
+          { title: 'Aquecimento pré-treino completo', category: 'Mobilidade', url: 'https://www.youtube.com/watch?v=WqwKfRImE-c', duration: '8:45' },
+          { title: 'HIIT 15 minutos queima gordura', category: 'Cardio', url: 'https://www.youtube.com/watch?v=ml6cT4AZdqI', duration: '15:00' },
+          { title: 'Abdômen definido em casa', category: 'Abdômen', url: 'https://www.youtube.com/watch?v=pSHjTRCQxIw', duration: '12:20' },
+          { title: 'Preparação de refeições saudáveis', category: 'Nutrição', url: 'https://www.youtube.com/watch?v=I9ccI8fZfS4', duration: '18:15' },
+          { title: 'Motivação para treinar', category: 'Motivação', url: 'https://www.youtube.com/watch?v=ZXsQAXx_ao0', duration: '3:45' }
+        ] %>
+
+        <% sample_videos.each do |video| %>
+          <button type="button"
+                  data-video-manager-target="sampleVideo"
+                  data-video="<%= video.to_json %>"
+                  data-action="click->video-manager#quickAdd"
+                  class="flex items-start gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-purple-500 hover:shadow-md transition-all text-left">
+            <svg class="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-sm text-gray-900 line-clamp-2"><%= video[:title] %></p>
+              <p class="text-xs text-gray-600 mt-1"><%= video[:category] %> • <%= video[:duration] %></p>
+            </div>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Adicionar Vídeo Personalizado</h3>
+
+      <%= form_with url: "#", method: :post, data: { video_manager_target: "form" } do |f| %>
+        <div class="mb-4">
+          <%= f.label :url, "URL do Vídeo (YouTube, Vimeo, etc)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.url_field :url,
+              placeholder: "https://youtube.com/watch?v=...",
+              data: { video_manager_target: "urlInput" },
+              class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :description, "Descrição", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.text_area :description,
+              rows: 3,
+              placeholder: "Descreva o conteúdo do vídeo...",
+              data: { video_manager_target: "descriptionInput" },
+              class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" %>
+        </div>
+
+        <%= f.submit "Adicionar Vídeo", class: "px-6 py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors cursor-pointer" %>
+      <% end %>
+    </div>
+
+    
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Biblioteca do Aluno</h3>
+        <span class="text-sm text-gray-600" data-video-manager-target="videoCount">0 vídeos</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-video-manager-target="videoGrid">
+        
+        <div class="col-span-full text-center py-12 text-gray-400">
+          <svg class="h-16 w-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+          </svg>
+          <p>Nenhum vídeo adicionado ainda</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,401 @@
+pt-BR:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d/%m"
+      long: "%d de %B de %Y"
+    day_names:
+      - Domingo
+      - Segunda-feira
+      - Terça-feira
+      - Quarta-feira
+      - Quinta-feira
+      - Sexta-feira
+      - Sábado
+    abbr_day_names:
+      - Dom
+      - Seg
+      - Ter
+      - Qua
+      - Qui
+      - Sex
+      - Sáb
+    month_names:
+      - ~
+      - Janeiro
+      - Fevereiro
+      - Março
+      - Abril
+      - Maio
+      - Junho
+      - Julho
+      - Agosto
+      - Setembro
+      - Outubro
+      - Novembro
+      - Dezembro
+    abbr_month_names:
+      - ~
+      - Jan
+      - Fev
+      - Mar
+      - Abr
+      - Mai
+      - Jun
+      - Jul
+      - Ago
+      - Set
+      - Out
+      - Nov
+      - Dez
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m %H:%M"
+      long: "%d de %B de %Y às %H:%M"
+    am: "AM"
+    pm: "PM"
+
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: aproximadamente 1 hora
+        other: aproximadamente %{count} horas
+      about_x_months:
+        one: aproximadamente 1 mês
+        other: aproximadamente %{count} meses
+      about_x_years:
+        one: aproximadamente 1 ano
+        other: aproximadamente %{count} anos
+      almost_x_years:
+        one: quase 1 ano
+        other: quase %{count} anos
+      half_a_minute: meio minuto
+      less_than_x_minutes:
+        one: menos de um minuto
+        other: menos de %{count} minutos
+      less_than_x_seconds:
+        one: menos de 1 segundo
+        other: menos de %{count} segundos
+      over_x_years:
+        one: mais de 1 ano
+        other: mais de %{count} anos
+      x_days:
+        one: 1 dia
+        other: "%{count} dias"
+      x_minutes:
+        one: 1 minuto
+        other: "%{count} minutos"
+      x_months:
+        one: 1 mês
+        other: "%{count} meses"
+      x_seconds:
+        one: 1 segundo
+        other: "%{count} segundos"
+
+  flash:
+    notices:
+      password_changed: "Senha alterada com sucesso!"
+      profile_updated: "Perfil atualizado com sucesso!"
+      photo_uploaded: "Foto enviada com sucesso! Aguarde a avaliação do treinador."
+      training_created: "Treino %{name} criado com sucesso!"
+      training_updated: "Treino atualizado com sucesso!"
+      training_deleted: "Treino removido com sucesso!"
+      training_status_changed: "Treino %{status} com sucesso!"
+      student_created: "Aluno criado com sucesso!"
+      student_updated: "Aluno atualizado com sucesso!"
+      student_deleted: "Aluno removido com sucesso!"
+      nutrition_plan_created: "Plano nutricional criado com sucesso."
+      notifications_sent: "Notificação enviada com sucesso para %{count} %{recipients}!"
+      all_notifications_read: "Todas as notificações foram marcadas como lidas"
+      registration_approved_simple: "Cadastro aprovado! Aluno %{name} pode agora acessar o sistema."
+      registration_approved_created: "Cadastro aprovado! Aluno %{name} criado e ativado."
+      registration_approved_emailed: "Cadastro aprovado! Aluno %{name} criado e ativado. Um email com as instruções de acesso foi enviado para %{email}."
+      registration_rejected: "Cadastro rejeitado e aluno notificado."
+      registration_reset: "Cadastro devolvido para análise."
+      registration_deleted: "Cadastro removido."
+      user_created: "Usuário criado com sucesso!"
+      user_updated: "Usuário atualizado com sucesso!"
+      user_deleted: "Usuário removido com sucesso!"
+      user_deactivated: "Usuário desativado com sucesso! Ele não poderá mais fazer login."
+      user_activated: "Usuário ativado com sucesso!"
+      nutrition_plan_updated: "Plano nutricional atualizado com sucesso."
+      nutrition_plan_deleted: "Plano nutricional removido com sucesso."
+      nutrition_plan_toggled: "Plano nutricional %{status} com sucesso."
+      video_created: "Vídeo criado com sucesso!"
+      video_added: "Vídeo adicionado com sucesso!"
+      video_updated: "Vídeo atualizado com sucesso!"
+      video_deleted: "Vídeo removido com sucesso!"
+      login_success: "Login realizado com sucesso!"
+      logout_success: "Logout realizado com sucesso."
+      password_reset_success: "Password has been reset."
+      exercise_created: "Exercício criado com sucesso!"
+      exercise_updated: "Exercício atualizado com sucesso!"
+    alerts:
+      access_denied: "Acesso negado"
+      access_denied_student: "Acesso negado."
+      user_not_found: "Usuário não encontrado ou não é um aluno."
+      student_profile_not_found: "Perfil de aluno não encontrado."
+      registration_approval_error: "Erro ao aprovar cadastro."
+      registration_rejection_error: "Erro ao rejeitar cadastro."
+      registration_reset_error: "Erro ao resetar cadastro."
+      self_deactivation_error: "Você não pode desativar sua própria conta!"
+      cannot_deactivate_self: "Você não pode desativar sua própria conta!"
+      account_deactivated: "Sua conta foi desativada. Entre em contato com o administrador."
+      invalid_credentials: "E-mail ou senha incorretos."
+      rate_limited: "Muitas tentativas. Aguarde alguns minutos e tente novamente."
+      access_restricted_partners: "Acesso restrito aos parceiros."
+      access_restricted_admin: "You must be an admin to access this page."
+      access_restricted_students: "Acesso restrito aos alunos."
+      permission_denied_exercise: "Você não tem permissão para acessar este exercício."
+      invalid_password: "Nova senha inválida"
+      incorrect_password: "Senha atual incorreta"
+      invalid_videoable_type: "Tipo de videoable inválido."
+      video_creation_error: "Erro ao criar vídeo."
+      exercise_creation_error: "Erro ao criar exercício."
+      exercise_update_error: "Erro ao atualizar exercício."
+      password_reset_expired: "Password reset link has expired. Please request a new one."
+      password_reset_invalid: "Password reset link is invalid or has expired."
+      rate_limit: "Try again later."
+    errors:
+      password_mismatch: "Passwords did not match."
+      rate_limit_email: "Too many email validation requests. Please try again in a few minutes."
+      rate_limit_registration: "Too many registration attempts. Please wait before trying again."
+      rate_limit_exercises: "Too many requests. Please wait a moment before loading more exercises."
+
+  activerecord:
+    attributes:
+      user:
+        name: "Nome"
+        email_address: "Email"
+        password: "Senha"
+        password_confirmation: "Confirmação de senha"
+        terms_accepted: "Termos de uso"
+      nutrition_plan:
+        name: "Nome"
+        student_profile: "Perfil do aluno"
+      meal:
+        meal_type: "Tipo de refeição"
+        meal_time: "Horário"
+        observations: "Observações"
+        meal_types:
+          cafe_da_manha: "Café da Manhã"
+          lanche: "Lanche"
+          almoco: "Almoço"
+          cafe_da_tarde: "Café da Tarde"
+          jantar: "Jantar"
+          ceia: "Ceia"
+      meal_food:
+        food: "Alimento"
+        quantity_grams: "Quantidade (g)"
+      food:
+        name: "Nome"
+        energy_kcal: "Energia (kcal/100g)"
+        protein_g: "Proteína (g/100g)"
+        carbohydrate_g: "Carboidratos (g/100g)"
+        fat_g: "Gordura (g/100g)"
+      anamnese:
+        gender: "Gênero"
+        age: "Idade"
+        height: "Altura"
+        weight: "Peso"
+        goal: "Objetivo"
+        physical_activity_level: "Nível de atividade física"
+        sleep_hours: "Horas de sono"
+        profession: "Profissão"
+        training_availability: "Disponibilidade de treino"
+        wake_up_time: "Horário de acordar"
+        sleep_time: "Horário de dormir"
+        time_of_biggest_appetite: "Hora do maior apetite"
+        alcohol_consumption: "Consumo de álcool"
+        stress_level: "Nível de estresse"
+        smoking: "Fumo"
+        bowel_movement_scale: "Escala de movimento intestinal"
+        urine_scale: "Escala de urina"
+        training_location: "Local de treino"
+        available_equipment: "Equipamento disponível"
+        breakfast: "Café da manhã"
+        lunch: "Almoço"
+        afternoon_snack: "Lanche da tarde"
+        dinner: "Jantar"
+        breakfast_time: "Horário do café"
+        lunch_time: "Horário do almoço"
+        afternoon_snack_time: "Horário do lanche"
+        dinner_time: "Horário do jantar"
+        digestion: "Digestão"
+        chewing: "Mastigação"
+        heartburn: "Azia"
+        reflux: "Refluxo"
+        gastritis: "Gastrite"
+        eating_motivation: "Motivação para comer"
+        personality: "Personalidade"
+        snacks_between_meals: "Lanches entre refeições"
+        satisfied_with_meals: "Satisfeito com refeições"
+        cpf: "CPF"
+        address: "Endereço"
+        phone: "Telefone"
+        routine_description: "Descrição de rotina"
+    errors:
+      messages:
+        blank: "não pode ficar em branco"
+        not_a_number: "não é um número válido"
+        greater_than: "deve ser maior que %{count}"
+        less_than_or_equal_to: "deve ser menor ou igual a %{count}"
+        inclusion: "não está incluído na lista"
+        invalid: "não é válido"
+        too_short: "é muito curto (mínimo: %{count} caracteres)"
+        confirmation: "não é igual a %{attribute}"
+        taken: "já está em uso"
+        record_invalid: "A validação falhou: %{errors}"
+      models:
+        user:
+          attributes:
+            email_address:
+              blank: "não pode ficar em branco"
+              invalid: "não é um endereço de e-mail válido"
+              taken: "já está em uso"
+            password:
+              blank: "não pode ficar em branco"
+              too_short: "deve ter no mínimo 8 caracteres"
+            terms_accepted:
+              accepted: "deve ser aceito"
+            anamnese_attributes:
+              gender: "Gênero"
+              age: "Idade"
+              height: "Altura"
+              weight: "Peso"
+              goal: "Objetivo"
+              physical_activity_level: "Nível de atividade física"
+              sleep_hours: "Horas de sono"
+              profession: "Profissão"
+              training_availability: "Disponibilidade de treino"
+              wake_up_time: "Horário de acordar"
+              sleep_time: "Horário de dormir"
+              time_of_biggest_appetite: "Hora do maior apetite"
+              alcohol_consumption: "Consumo de álcool"
+              stress_level: "Nível de estresse"
+              smoking: "Fumo"
+              bowel_movement_scale: "Escala de movimento intestinal"
+              urine_scale: "Escala de urina"
+              training_location: "Local de treino"
+              available_equipment: "Equipamento disponível"
+              breakfast: "Café da manhã"
+              lunch: "Almoço"
+              afternoon_snack: "Lanche da tarde"
+              dinner: "Jantar"
+              breakfast_time: "Horário do café"
+              lunch_time: "Horário do almoço"
+              afternoon_snack_time: "Horário do lanche"
+              dinner_time: "Horário do jantar"
+              digestion: "Digestão"
+              chewing: "Mastigação"
+              heartburn: "Azia"
+              reflux: "Refluxo"
+              gastritis: "Gastrite"
+              eating_motivation: "Motivação para comer"
+              personality: "Personalidade"
+              snacks_between_meals: "Lanches entre refeições"
+              satisfied_with_meals: "Satisfeito com refeições"
+              cpf: "CPF"
+              address: "Endereço"
+              phone: "Telefone"
+              routine_description: "Descrição de rotina"
+        anamnese:
+          attributes:
+            gender: "Gênero"
+            age: "Idade"
+            height: "Altura"
+            weight: "Peso"
+            goal: "Objetivo"
+            physical_activity_level: "Nível de atividade física"
+            sleep_hours: "Horas de sono"
+            profession: "Profissão"
+            training_availability: "Disponibilidade de treino"
+            wake_up_time: "Horário de acordar"
+            sleep_time: "Horário de dormir"
+            time_of_biggest_appetite: "Hora do maior apetite"
+            alcohol_consumption: "Consumo de álcool"
+            stress_level: "Nível de estresse"
+            smoking: "Fumo"
+            bowel_movement_scale: "Escala de movimento intestinal"
+            urine_scale: "Escala de urina"
+            training_location: "Local de treino"
+            available_equipment: "Equipamento disponível"
+            breakfast: "Café da manhã"
+            lunch: "Almoço"
+            afternoon_snack: "Lanche da tarde"
+            dinner: "Jantar"
+            breakfast_time: "Horário do café"
+            lunch_time: "Horário do almoço"
+            afternoon_snack_time: "Horário do lanche"
+            dinner_time: "Horário do jantar"
+            digestion: "Digestão"
+            chewing: "Mastigação"
+            heartburn: "Azia"
+            reflux: "Refluxo"
+            gastritis: "Gastrite"
+            eating_motivation: "Motivação para comer"
+            personality: "Personalidade"
+            snacks_between_meals: "Lanches entre refeições"
+            satisfied_with_meals: "Satisfeito com refeições"
+            cpf: "CPF"
+            address: "Endereço"
+            phone: "Telefone"
+            routine_description: "Descrição de rotina"
+        nutrition_plan:
+          attributes:
+            name:
+              blank: "não pode ficar em branco"
+            student_profile_id:
+              blank: "deve ser selecionado"
+              required: "deve ser selecionado"
+            student_profile:
+              blank: "deve ser selecionado"
+              required: "deve ser selecionado"
+        meal:
+          attributes:
+            meal_type:
+              blank: "não pode ficar em branco"
+              inclusion: "não é válido"
+            meal_time:
+              blank: "não pode ficar em branco"
+        meal_food:
+          attributes:
+            food_id:
+              blank: "Alimento é obrigatório"
+            quantity_grams:
+              blank: "Quantidade (g) é obrigatória"
+              not_a_number: "Quantidade (g) deve ser um valor numérico"
+              greater_than: "Quantidade (g) deve ser maior que zero"
+        food:
+          attributes:
+            name:
+              blank: "não pode ficar em branco"
+            energy_kcal:
+              blank: "não pode ficar em branco"
+              not_a_number: "deve ser um número válido"
+              greater_than_or_equal_to: "deve ser maior ou igual a 0"
+            protein_g:
+              blank: "não pode ficar em branco"
+              not_a_number: "deve ser um número válido"
+              greater_than_or_equal_to: "deve ser maior ou igual a 0"
+            carbohydrate_g:
+              not_a_number: "deve ser um número válido"
+              greater_than_or_equal_to: "deve ser maior ou igual a 0"
+
+  errors:
+    messages:
+      blank: "não pode ficar em branco"
+      not_a_number: "não é um número válido"
+      greater_than: "deve ser maior que %{count}"
+      less_than_or_equal_to: "deve ser menor ou igual a %{count}"
+      inclusion: "não está incluído na lista"
+      invalid: "não é válido"
+      too_short: "é muito curto (mínimo: %{count} caracteres)"
+      confirmation: "não é igual a %{attribute}"
+      taken: "já está em uso"

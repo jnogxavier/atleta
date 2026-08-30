@@ -1,0 +1,8 @@
+class CreateAudioRecordings < ActiveRecord::Migration[8.1]
+  def change
+    create_table :audio_recordings do |t|
+      t.references :user, null: false, foreign_key: true
+      t.timestamps
+    end
+  end
+end

@@ -1,0 +1,77 @@
+<% is_search = defined?(search_query) && search_query.present? %>
+<div class="flex gap-2 flex-wrap">
+  <% if is_search %>
+    <% if exercises.prev_page %>
+      <%= link_to search_admin_strength_exercises_path(search: search_query, page: exercises.prev_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+        ← Anterior
+      <% end %>
+    <% else %>
+      <span class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-400 bg-gray-50">
+        ← Anterior
+      </span>
+    <% end %>
+
+    <div class="flex gap-1">
+      <% exercises.total_pages.times do |i| %>
+        <% page_num = i + 1 %>
+        <% if (page_num - exercises.current_page).abs <= 2 || page_num == 1 || page_num == exercises.total_pages %>
+          <%= link_to search_admin_strength_exercises_path(search: search_query, page: page_num),
+              class: "px-3 py-2 border rounded-lg text-sm font-medium transition-colors #{page_num == exercises.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}", data: { action: "click->search#handlePaginationLink" } do %>
+            <%= page_num %>
+          <% end %>
+        <% elsif (page_num - exercises.current_page).abs == 3 %>
+          <span class="px-2 py-2 text-gray-500">...</span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if exercises.next_page %>
+      <%= link_to search_admin_strength_exercises_path(search: search_query, page: exercises.next_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors", data: { action: "click->search#handlePaginationLink" } do %>
+        Próximo →
+      <% end %>
+    <% else %>
+      <span class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-400 bg-gray-50">
+        Próximo →
+      </span>
+    <% end %>
+  <% else %>
+    <% if exercises.prev_page %>
+      <%= link_to admin_dashboard_path(tab: 'exercises', page: exercises.prev_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+        ← Anterior
+      <% end %>
+    <% else %>
+      <span class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-400 bg-gray-50">
+        ← Anterior
+      </span>
+    <% end %>
+
+    <div class="flex gap-1">
+      <% exercises.total_pages.times do |i| %>
+        <% page_num = i + 1 %>
+        <% if (page_num - exercises.current_page).abs <= 2 || page_num == 1 || page_num == exercises.total_pages %>
+          <%= link_to admin_dashboard_path(tab: 'exercises', page: page_num),
+              class: "px-3 py-2 border rounded-lg text-sm font-medium transition-colors #{page_num == exercises.current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+            <%= page_num %>
+          <% end %>
+        <% elsif (page_num - exercises.current_page).abs == 3 %>
+          <span class="px-2 py-2 text-gray-500">...</span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if exercises.next_page %>
+      <%= link_to admin_dashboard_path(tab: 'exercises', page: exercises.next_page), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+        Próximo →
+      <% end %>
+    <% else %>
+      <span class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-400 bg-gray-50">
+        Próximo →
+      </span>
+    <% end %>
+  <% end %>
+
+  <div class="ml-4 text-sm text-gray-600 w-full text-center mt-2">
+    <span class="font-medium"><%= exercises.current_page %></span> de <span class="font-medium"><%= exercises.total_pages %></span>
+    (<%= exercises.total_count %> total)
+  </div>
+</div>

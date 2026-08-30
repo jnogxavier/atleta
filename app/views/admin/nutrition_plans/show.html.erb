@@ -1,0 +1,117 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <%= link_to admin_nutrition_plans_path, class: "text-gray-500 hover:text-gray-700" do %>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+        <% end %>
+        <h1 class="text-2xl font-bold text-gray-900"><%= @nutrition_plan.name %></h1>
+        <% if @nutrition_plan.active %>
+          <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+        <% else %>
+          <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">Inativo</span>
+        <% end %>
+      </div>
+      <p class="text-gray-600">Aluno: <%= @nutrition_plan.student_profile.name %></p>
+    </div>
+    <div class="flex gap-2">
+      <%= link_to student_nutrition_plan_path(@nutrition_plan), target: "_blank", class: "px-4 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors flex items-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+        </svg>
+        Imprimir
+      <% end %>
+      <%= link_to edit_admin_nutrition_plan_path(@nutrition_plan), class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+        </svg>
+        Editar
+      <% end %>
+      <%= button_to admin_nutrition_plan_path(@nutrition_plan), method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir este plano?" }, class: "px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center gap-2" do %>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+        </svg>
+        Excluir
+      <% end %>
+    </div>
+  </div>
+
+  <% if @nutrition_plan.description.present? %>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-2">Descrição</h2>
+      <p class="text-gray-700"><%= @nutrition_plan.description %></p>
+    </div>
+  <% end %>
+
+  <div class="space-y-6">
+    <h2 class="text-xl font-semibold text-gray-900">Refeições</h2>
+
+    <% if @nutrition_plan.meals.any? %>
+      <% @nutrition_plan.meals.by_time.each do |meal| %>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                <%= meal.meal_type.gsub('_', ' ').titleize %>
+              </h3>
+              <div class="flex gap-4 text-sm text-gray-600 mt-1">
+                <% if meal.meal_time.present? %>
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <%= meal.meal_time.strftime("%H:%M") %>
+                  </span>
+                <% end %>
+                <% if meal.observations.present? %>
+                  <span><%= meal.observations %></span>
+                <% end %>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-gray-600">Total</p>
+              <p class="text-lg font-semibold text-gray-900"><%= meal.total_calories.to_i %> kcal</p>
+              <p class="text-sm text-gray-600"><%= meal.total_protein.round(1) %>g proteína</p>
+            </div>
+          </div>
+
+          <% if meal.foods.any? %>
+            <div class="border-t border-gray-200 pt-4">
+              <table class="min-w-full">
+                <thead>
+                  <tr class="text-left text-xs font-medium text-gray-500 uppercase">
+                    <th class="pb-2">Alimento</th>
+                    <th class="pb-2">Quantidade</th>
+                    <th class="pb-2 text-right">Calorias</th>
+                    <th class="pb-2 text-right">Proteína</th>
+                  </tr>
+                </thead>
+                <tbody class="text-sm text-gray-700">
+                  <% meal.foods.each do |food| %>
+                    <tr class="border-t border-gray-100">
+                      <td class="py-2"><%= food.nome_do_alimento %></td>
+                      <td class="py-2"><%= food.quantidade %></td>
+                      <td class="py-2 text-right"><%= food.calorias.to_i %> kcal</td>
+                      <td class="py-2 text-right"><%= food.proteina.round(1) %>g</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <p class="text-gray-500 text-sm border-t border-gray-200 pt-4">Nenhum alimento cadastrado</p>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center text-gray-500">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <p class="mt-2">Nenhuma refeição cadastrada</p>
+      </div>
+    <% end %>
+  </div>
+</div>

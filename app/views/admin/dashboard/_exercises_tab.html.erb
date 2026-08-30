@@ -1,0 +1,315 @@
+<div class="space-y-6"
+     data-controller="search exercise-type-filter exercise-form-modal video-modal"
+     data-search-url-value="<%= search_admin_strength_exercises_path %>"
+     data-search-debounce-delay-value="300"
+     data-action="click->exercise-form-modal#closeBackground exercise-form-modal:saved->exercise-type-filter#exerciseSaved click->video-modal#closeBackground">
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Banco de Exercícios</h2>
+    <p class="text-gray-600">Gerencie todos os exercícios disponíveis no sistema</p>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div class="flex gap-2 mb-6 overflow-x-auto items-center">
+      <button data-exercise-type="strength"
+              data-exercise-type-filter-target="typeButton"
+              data-action="click->exercise-type-filter#switchType"
+              class="exercise-type-btn active px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-medium hover:bg-purple-200 transition-colors">
+        Força
+      </button>
+      <button data-exercise-type="mobility"
+              data-exercise-type-filter-target="typeButton"
+              data-action="click->exercise-type-filter#switchType"
+              class="exercise-type-btn px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium hover:bg-green-200 transition-colors">
+        Mobilidade
+      </button>
+      <button data-exercise-type="core"
+              data-exercise-type-filter-target="typeButton"
+              data-action="click->exercise-type-filter#switchType"
+              class="exercise-type-btn px-4 py-2 bg-orange-100 text-orange-700 rounded-lg font-medium hover:bg-orange-200 transition-colors">
+        Core/Abdômen
+      </button>
+      <button data-exercise-type="cardio"
+              data-exercise-type-filter-target="typeButton"
+              data-action="click->exercise-type-filter#switchType"
+              class="exercise-type-btn px-4 py-2 bg-red-100 text-red-700 rounded-lg font-medium hover:bg-red-200 transition-colors">
+        Cardio
+      </button>
+
+      <button type="button"
+              data-action="click->exercise-type-filter#clearFilter"
+              data-exercise-type-filter-target="clearButton"
+              class="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+              title="Limpar filtro">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex gap-3 mb-6">
+      <div class="flex-1 relative">
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text"
+               data-search-target="input"
+               data-action="input->search#filter"
+               placeholder="Buscar exercício..."
+               class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+        <button type="button"
+                data-action="click->search#clearSearch"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <button data-action="click->exercise-form-modal#open"
+              class="px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-all flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Novo Exercício
+      </button>
+    </div>
+
+    <div class="hidden bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center" data-search-target="noResults">
+      <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Nenhum exercício encontrado</h3>
+      <p class="text-gray-600">Tente ajustar os termos da sua busca</p>
+    </div>
+
+    <div data-search-target="container" class="space-y-3">
+      <% strength_exercises = StrengthExercise.order('LOWER(name)').to_a %>
+      <% mobility_exercises = MobilityExercise.order('LOWER(name)').to_a %>
+      <% core_exercises = CoreExercise.order('LOWER(name)').to_a %>
+      <% cardio_exercises = CardioExercise.order('LOWER(name)').to_a %>
+
+      <%
+        all_exercises_list = strength_exercises + mobility_exercises + core_exercises + cardio_exercises
+        sorted_exercises = all_exercises_list.sort_by { |e| e.name.downcase }
+
+        per_page = 10
+        current_page = (params[:exercises_page] || 1).to_i
+        total_count = sorted_exercises.length
+        total_pages = (total_count.to_f / per_page).ceil
+        start_idx = (current_page - 1) * per_page
+        paginated_exercises = sorted_exercises[start_idx...start_idx + per_page]
+
+        @exercises_current_page = current_page
+        @exercises_total_pages = total_pages
+        @exercises_total_count = total_count
+
+        paginated_by_type = {
+          strength: strength_exercises.select { |e| paginated_exercises.include?(e) },
+          mobility: mobility_exercises.select { |e| paginated_exercises.include?(e) },
+          core: core_exercises.select { |e| paginated_exercises.include?(e) },
+          cardio: cardio_exercises.select { |e| paginated_exercises.include?(e) }
+        }
+      %>
+
+      <% [:strength, :mobility, :core, :cardio].each do |type| %>
+        <% if paginated_by_type[type].any? %>
+          <%= render 'admin/dashboard/exercise_items', exercises: paginated_by_type[type], exercise_type: type %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="mt-6" data-search-target="pagination">
+      <% if @exercises_total_pages > 1 %>
+        <div class="flex gap-2 flex-wrap">
+          <% if @exercises_current_page > 1 %>
+            <%= link_to admin_dashboard_path(tab: 'exercises', exercises_page: @exercises_current_page - 1), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              ← Anterior
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-400 bg-gray-50">
+              ← Anterior
+            </span>
+          <% end %>
+
+          <div class="flex gap-1">
+            <% @exercises_total_pages.times do |i| %>
+              <% page_num = i + 1 %>
+              <% if (page_num - @exercises_current_page).abs <= 2 || page_num == 1 || page_num == @exercises_total_pages %>
+                <%= link_to admin_dashboard_path(tab: 'exercises', exercises_page: page_num),
+                    class: "px-3 py-2 border rounded-lg text-sm font-medium transition-colors #{page_num == @exercises_current_page ? 'bg-cyan-500 text-white border-cyan-500' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}" do %>
+                  <%= page_num %>
+                <% end %>
+              <% elsif (page_num - @exercises_current_page).abs == 3 %>
+                <span class="px-2 py-2 text-gray-500">...</span>
+              <% end %>
+            <% end %>
+          </div>
+
+          <% if @exercises_current_page < @exercises_total_pages %>
+            <%= link_to admin_dashboard_path(tab: 'exercises', exercises_page: @exercises_current_page + 1), class: "px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" do %>
+              Próximo →
+            <% end %>
+          <% else %>
+            <span class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-400 bg-gray-50">
+              Próximo →
+            </span>
+          <% end %>
+
+          <div class="ml-4 text-sm text-gray-600 w-full text-center mt-2">
+            <span class="font-medium"><%= @exercises_current_page %></span> de <span class="font-medium"><%= @exercises_total_pages %></span>
+            (<%= @exercises_total_count %> total)
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+       data-exercise-form-modal-target="container"
+       data-action="click->exercise-form-modal#closeBackground">
+  <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="p-6 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 data-exercise-form-modal-target="title" class="text-xl font-bold text-gray-900">Novo Exercício</h3>
+        <button data-action="click->exercise-form-modal#close" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="p-6">
+      <form id="exercise-form" data-exercise-form-modal-target="form" data-action="submit->exercise-form-modal#submit" class="space-y-4">
+        <input type="hidden" name="id" data-exercise-form-modal-target="exerciseId">
+        <input type="hidden" name="type" data-exercise-form-modal-target="exerciseTypeField">
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Exercício</label>
+          <select name="exercise_type" data-action="change->exercise-form-modal#typeChanged" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+            <option value="strength">Força</option>
+            <option value="mobility">Mobilidade</option>
+            <option value="core">Core/Abdômen</option>
+            <option value="cardio">Cardio</option>
+          </select>
+        </div>
+
+        <div data-exercise-form-modal-target="strengthFields" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Exercício</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" data-was-required="true">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Grupo Muscular</label>
+            <input type="text" name="muscle_group" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Equipamento</label>
+            <input type="text" name="equipment" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+            <textarea name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+
+        <div data-exercise-form-modal-target="mobilityFields" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Exercício</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+            <textarea name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+
+        <div data-exercise-form-modal-target="coreFields" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Exercício</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+            <textarea name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+
+        <div data-exercise-form-modal-target="cardioFields" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Exercício</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Equipamento</label>
+            <input type="text" name="equipment" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+            <textarea name="description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+
+        <div class="flex gap-3 justify-end">
+          <button type="button" data-action="click->exercise-form-modal#close" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+            Cancelar
+          </button>
+          <button type="submit" class="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600">
+            Salvar Exercício
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="videoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" data-video-modal-target="container">
+  <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col">
+    <div class="p-6 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
+      <div>
+        <h3 class="text-xl font-bold text-gray-900">Vídeos do Exercício</h3>
+        <p data-video-modal-target="exerciseName" class="text-sm text-gray-600 mt-1"></p>
+      </div>
+      <button data-action="click->video-modal#close" class="text-gray-400 hover:text-gray-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="p-6 overflow-y-auto flex-1 space-y-6">
+      <input type="hidden" data-video-modal-target="exerciseId">
+      <input type="hidden" data-video-modal-target="exerciseType">
+
+      <!-- Add Video Form -->
+      <div data-video-modal-target="formWrapper" class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+        <h4 data-video-modal-target="formHeading" class="font-semibold text-gray-900 mb-4">Adicionar Vídeo</h4>
+        <form data-video-modal-target="form" data-action="submit->video-modal#submitVideo" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">URL do Vídeo (YouTube, Vimeo, etc)</label>
+            <input type="url" data-video-modal-target="url" placeholder="https://youtube.com/watch?v=..." required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Descrição (opcional)</label>
+            <textarea data-video-modal-target="description" placeholder="Descreva o conteúdo do vídeo..." rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+          </div>
+          <button type="submit" data-video-modal-target="submitButton" class="px-4 py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors">
+            Adicionar Vídeo
+          </button>
+        </form>
+      </div>
+
+      <!-- Video Display (Only One Allowed) -->
+      <div>
+        <h4 class="font-semibold text-gray-900 mb-4">Vídeo do Exercício</h4>
+        <div data-video-modal-target="videosList" class="space-y-3">
+          <div class="text-center py-8 text-gray-500">
+            <svg class="h-12 w-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <p>Nenhum vídeo adicionado</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

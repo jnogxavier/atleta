@@ -1,0 +1,161 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto p-2 sm:p-4 lg:p-6">
+    
+    <div class="mb-6">
+      <div class="flex items-center gap-4 mb-4">
+        <%= link_to admin_trainings_path, class: "text-gray-600 hover:text-gray-900" do %>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        <% end %>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Novo Treino</h1>
+          <p class="text-gray-600 mt-1">Crie um novo treino personalizado</p>
+        </div>
+      </div>
+    </div>
+
+    <%= form_with(model: [:admin, @training], local: true, data: { controller: "training-builder" }) do |form| %>
+      <% if @training.errors.any? %>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <h3 class="text-sm font-medium text-red-800 mb-2">
+            <%= pluralize(@training.errors.count, "erro") %> encontrado(s):
+          </h3>
+          <ul class="list-disc list-inside text-sm text-red-700 space-y-1">
+            <% @training.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="h-5 w-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          </svg>
+          Informações do Treino
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <%= form.label :student_profile_id, "Selecionar Aluno", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.select :student_profile_id,
+                options_from_collection_for_select(@students, :id, :name, @training.student_profile_id),
+                { prompt: 'Escolha um aluno...' },
+                class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent",
+                required: true %>
+          </div>
+
+          <div>
+            <%= form.label :day, "Dia do Treino", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.select :day,
+                options_for_select([['Treino A', 'A'], ['Treino B', 'B'], ['Treino C', 'C'], ['Treino D', 'D'], ['Treino E', 'E']], @training.day),
+                {},
+                class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent",
+                required: true %>
+          </div>
+
+          <div>
+            <%= form.label :name, "Nome do Treino", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.text_field :name,
+                placeholder: "ex: Treino de Pernas",
+                class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent",
+                required: true %>
+          </div>
+
+          <div>
+            <%= form.label :active, "Status", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.select :active,
+                options_for_select([['Ativo', true], ['Inativo', false]], @training.active),
+                {},
+                class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent" %>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <%= form.label :description, "Descrição (Opcional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= form.text_area :description,
+              rows: 3,
+              placeholder: "Adicione uma descrição ou observações sobre este treino...",
+              class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent" %>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="h-5 w-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          Buscar e Adicionar Exercícios
+        </h3>
+
+        <div class="space-y-3">
+          <div class="p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p class="text-xs text-blue-600 font-medium mb-2">💡 Dicas de Busca Avançada:</p>
+            <ul class="text-xs text-blue-700 space-y-1">
+              <li>• <strong>Por exercício:</strong> "supino", "agachamento", "puxada"</li>
+              <li>• <strong>Por músculo:</strong> "peito", "costas", "pernas", "bíceps"</li>
+              <li>• <strong>Por equipamento:</strong> "halter", "barra", "cabo", "máquina"</li>
+            </ul>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div class="md:col-span-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Buscar Exercício</label>
+              <input type="text"
+                     data-training-builder-target="searchInput"
+                     data-action="input->training-builder#search"
+                     placeholder="Digite para buscar exercício, músculo ou equipamento..."
+                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+              <select data-training-builder-target="exerciseType"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+                <option value="strength">Força</option>
+                <option value="mobility">Mobilidade</option>
+                <option value="core">Core</option>
+                <option value="cardio">Cardio</option>
+              </select>
+            </div>
+          </div>
+
+          
+          <div data-training-builder-target="searchResults"
+               class="hidden max-h-64 overflow-y-auto border border-gray-200 rounded-lg bg-white">
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="h-5 w-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+          </svg>
+          Exercícios do Treino
+        </h3>
+
+        <div data-training-builder-target="exerciseList" class="space-y-3">
+          <div class="text-center py-8 text-gray-500">
+            <svg class="h-12 w-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+            </svg>
+            <p>Nenhum exercício adicionado ainda</p>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="flex gap-3">
+        <%= link_to "Cancelar", admin_trainings_path, class: "px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors" %>
+        <%= form.submit "Criar Treino",
+            class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center gap-2" %>
+      </div>
+    <% end %>
+  </div>
+</div>

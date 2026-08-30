@@ -1,0 +1,352 @@
+<div class="space-y-6" data-controller="search user-modal">
+  <div class="text-center">
+    <h2 class="text-4xl font-bold text-gray-900 mb-3">GERENCIAR USUÁRIOS</h2>
+    <p class="text-lg text-gray-600">Controle de acessos e permissões</p>
+    <div class="w-20 h-1 bg-gradient-to-r from-cyan-500 to-cyan-600 mx-auto mt-4 rounded-full"></div>
+  </div>
+
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex-1 relative">
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text"
+               data-search-target="input"
+               data-action="input->search#filter"
+               placeholder="Buscar por nome, email ou função..."
+               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+      </div>
+      <%= link_to new_admin_user_path, class: "px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors flex items-center justify-center gap-2 whitespace-nowrap" do %>
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Novo Usuário
+      <% end %>
+    </div>
+  </div>
+
+  
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to admin_dashboard_path(tab: 'users', sort: 'email', direction: @sort_column == 'email' && @sort_direction == 'asc' ? 'desc' : 'asc'), class: "flex items-center gap-1 hover:text-gray-700" do %>
+                Email
+                <% if @sort_column == 'email' %>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <% if @sort_direction == 'asc' %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    <% else %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    <% end %>
+                  </svg>
+                <% end %>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to admin_dashboard_path(tab: 'users', sort: 'role', direction: @sort_column == 'role' && @sort_direction == 'asc' ? 'desc' : 'asc'), class: "flex items-center gap-1 hover:text-gray-700" do %>
+                Função
+                <% if @sort_column == 'role' %>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <% if @sort_direction == 'asc' %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    <% else %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    <% end %>
+                  </svg>
+                <% end %>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to admin_dashboard_path(tab: 'users', sort: 'created_at', direction: @sort_column == 'created_at' && @sort_direction == 'asc' ? 'desc' : 'asc'), class: "flex items-center gap-1 hover:text-gray-700" do %>
+                Criado em
+                <% if @sort_column == 'created_at' %>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <% if @sort_direction == 'asc' %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    <% else %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    <% end %>
+                  </svg>
+                <% end %>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perfil</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to admin_dashboard_path(tab: 'users', sort: 'status', direction: @sort_column == 'status' && @sort_direction == 'asc' ? 'desc' : 'asc'), class: "flex items-center gap-1 hover:text-gray-700" do %>
+                Status
+                <% if @sort_column == 'status' %>
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <% if @sort_direction == 'asc' %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    <% else %>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    <% end %>
+                  </svg>
+                <% end %>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200" id="users-table-body">
+          <% @users.each do |user| %>
+            <tr class="hover:bg-gray-50 transition-colors"
+                data-search-target="item"
+                data-searchable="<%= [user.email_address, user.name, user.role, user.student_profile&.name, user.partner_profile&.name].compact.join(' ').downcase %>">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                #<%= user.id %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <%= link_to admin_user_path(user), class: "text-sm font-medium text-cyan-600 hover:text-cyan-800" do %>
+                  <%= user.email_address %>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% case user.role %>
+                <% when 'admin' %>
+                  <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full">Admin</span>
+                <% when 'student' %>
+                  <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">Aluno</span>
+                <% when 'partner' %>
+                  <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">Parceiro</span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full"><%= user.role.titleize %></span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= l(user.created_at.to_date) %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if user.student? && user.student_profile %>
+                  <div class="text-sm text-gray-900"><%= user.student_profile.name %></div>
+                  <div class="text-xs text-gray-500"><%= user.student_profile.status.titleize %></div>
+                <% elsif user.partner? && user.partner_profile %>
+                  <div class="text-sm text-gray-900"><%= user.partner_profile.name %></div>
+                  <div class="text-xs text-gray-500"><%= user.partner_profile.profession %></div>
+                <% else %>
+                  <span class="text-sm text-gray-400">Sem perfil</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if user.deactivated_at.present? %>
+                  <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full">Desativado</span>
+                <% elsif user.student? && user.student_profile %>
+                  <% if user.student_profile.currently_active? %>
+                    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+                  <% elsif user.student_profile.expired? %>
+                    <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full">Expirado</span>
+                  <% else %>
+                    <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded-full"><%= user.student_profile.status.titleize %></span>
+                  <% end %>
+                <% elsif user.partner? && user.partner_profile %>
+                  <span class="px-2 py-1 text-xs font-medium bg-<%= user.partner_profile.active? ? 'green' : 'gray' %>-100 text-<%= user.partner_profile.active? ? 'green' : 'gray' %>-700 rounded-full">
+                    <%= user.partner_profile.status.titleize %>
+                  </span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">Ativo</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex justify-end gap-2">
+                  <%= link_to edit_admin_user_path(user), class: "inline-flex items-center px-3 py-1.5 bg-cyan-100 text-cyan-700 rounded-lg text-sm font-medium hover:bg-cyan-200 transition-colors" do %>
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    Editar
+                  <% end %>
+                  <% unless user.id == current_user.id %>
+                    <% if user.deactivated_at.nil? %>
+                      <button type="button"
+                              data-action="click->user-modal#open"
+                              data-user-id="<%= user.id %>"
+                              data-modal-action="deactivate"
+                              data-user-email="<%= user.email_address %>"
+                              class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded-lg text-sm font-medium hover:bg-yellow-200 transition-colors">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                        </svg>
+                        Desativar
+                      </button>
+                    <% else %>
+                      <button type="button"
+                              data-action="click->user-modal#open"
+                              data-user-id="<%= user.id %>"
+                              data-modal-action="activate"
+                              data-user-email="<%= user.email_address %>"
+                              class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200 transition-colors">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Ativar
+                      </button>
+                    <% end %>
+                    <% if user.student? || user.partner? %>
+                      <button type="button"
+                              data-action="click->user-modal#open"
+                              data-user-id="<%= user.id %>"
+                              data-modal-action="delete"
+                              data-user-email="<%= user.email_address %>"
+                              data-user-role="<%= user.role %>"
+                              class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1v3M4 7h16"></path>
+                        </svg>
+                        Excluir
+                      </button>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-sm text-gray-600 text-center">
+        Total: <%= @users.count %> usuários
+      </div>
+    </div>
+  </div>
+
+
+  <%
+    all_users_count = User.count
+    admin_count = User.where(role: 'admin').count
+    student_count = User.where(role: 'student').count
+    partner_count = User.where(role: 'partner').count
+  %>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-red-100 rounded-lg">
+          <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-red-600"><%= admin_count %></div>
+          <div class="text-sm text-red-700">Administradores</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-blue-100 rounded-lg">
+          <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-blue-600"><%= student_count %></div>
+          <div class="text-sm text-blue-700">Alunos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-purple-100 rounded-lg">
+          <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-purple-600"><%= partner_count %></div>
+          <div class="text-sm text-purple-700">Parceiros</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-user-modal-target="container" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50" data-action="click->user-modal#closeBackground">
+  <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" data-action="click->user-modal#stopPropagation">
+    <div class="mt-3">
+      <!-- Status change modal content -->
+      <div data-user-modal-target="statusContent">
+        <h3 class="text-lg font-medium text-gray-900 mb-4" data-user-modal-target="title">Alterar Status do Usuário</h3>
+
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 mb-2">Usuário: <span data-user-modal-target="email" class="font-medium"></span></p>
+        </div>
+
+        <form data-user-modal-target="form" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="_method" data-user-modal-target="method" value="patch">
+
+          <div class="mb-4" data-user-modal-target="reasonSection">
+            <label for="reason" class="block text-sm font-medium text-gray-700 mb-2">
+              Motivo <span class="text-red-500">*</span>
+            </label>
+            <textarea
+              id="reason"
+              name="reason"
+              rows="4"
+              required
+              data-user-modal-target="reasonTextarea"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              placeholder="Descreva o motivo desta alteração..."></textarea>
+          </div>
+
+          <div class="flex gap-3">
+            <button type="submit" data-user-modal-target="confirmButton" class="flex-1 px-4 py-2 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 transition-colors">
+              Confirmar
+            </button>
+            <button type="button" data-action="click->user-modal#close" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition-colors">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Delete modal content -->
+      <div data-user-modal-target="deleteContent" class="hidden">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+            <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900">Excluir Usuário</h3>
+        </div>
+
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 mb-2">
+            Tem certeza que deseja excluir permanentemente este <span data-user-modal-target="roleLabel" class="font-medium"></span>?
+          </p>
+          <p class="text-sm text-gray-600 mb-2">
+            Email: <span data-user-modal-target="deleteEmail" class="font-medium"></span>
+          </p>
+          <p class="text-sm text-red-600 font-medium mt-3">
+            ⚠️ Esta ação não pode ser desfeita!
+          </p>
+        </div>
+
+        <form data-user-modal-target="deleteForm" method="post">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="_method" value="delete">
+
+          <div class="flex gap-3">
+            <button type="submit" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors">
+              Sim, Excluir
+            </button>
+            <button type="button" data-action="click->user-modal#close" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition-colors">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- End modal -->
+  </div>
+</div>
+<!-- End main wrapper with controllers -->

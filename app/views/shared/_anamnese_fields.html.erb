@@ -1,0 +1,545 @@
+<div class="grid grid-cols-2 gap-4">
+  <div>
+    <%= required_field_label("Sexo", anamnese, :gender, f) %>
+    <%= f.select :gender,
+        [['Masculino', 'male'], ['Feminino', 'female']],
+        { prompt: 'Selecione...' },
+        { required: true, class: field_error_class(anamnese, :gender, base_class: input_class) } %>
+    <%= field_error_message(anamnese, :gender) %>
+  </div>
+
+  <div>
+    <%= required_field_label("Idade", anamnese, :age, f) %>
+    <%= f.number_field :age, min: 1, max: 120, required: true, placeholder: "Ex: 25", class: field_error_class(anamnese, :age, base_class: input_class) %>
+    <%= field_error_message(anamnese, :age) %>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+  <div>
+    <%= required_field_label("Altura (cm)", anamnese, :height, f) %>
+    <%= f.number_field :height, step: 0.01, min: 0, required: true, placeholder: "Ex: 175", class: field_error_class(anamnese, :height, base_class: input_class) %>
+    <%= field_error_message(anamnese, :height) %>
+  </div>
+
+  <div>
+    <%= required_field_label("Peso (kg)", anamnese, :weight, f) %>
+    <%= f.number_field :weight, step: 0.1, min: 0, required: true, placeholder: "Ex: 70", class: field_error_class(anamnese, :weight, base_class: input_class) %>
+    <%= field_error_message(anamnese, :weight) %>
+  </div>
+</div>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Objetivo Principal", anamnese, :goal, f) %>
+  <%= f.select :goal,
+      [
+        ['Emagrecimento', 'weight_loss'],
+        ['Ganho de Massa Muscular', 'muscle_gain'],
+        ['Melhora do Condicionamento', 'fitness'],
+        ['Reabilitação', 'rehabilitation'],
+        ['Saúde Geral', 'general_health']
+      ],
+      { prompt: 'Selecione seu objetivo...' },
+      { required: true, class: field_error_class(anamnese, :goal, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :goal) %>
+</div>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Nível de Atividade Física", anamnese, :physical_activity_level, f) %>
+  <%= f.select :physical_activity_level,
+      [
+        ['Sedentário', 'sedentary'],
+        ['Levemente Ativo (1-3x por semana)', 'lightly_active'],
+        ['Moderadamente Ativo (3-5x por semana)', 'moderately_active'],
+        ['Muito Ativo (6-7x por semana)', 'very_active'],
+        ['Atleta', 'athlete']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :physical_activity_level, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :physical_activity_level) %>
+</div>
+
+<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Condições de Saúde</label>
+  <%= f.text_area :health_conditions,
+      rows: 3,
+      placeholder: "Diabetes, hipertensão, problemas cardíacos, etc.",
+      class: input_class %>
+</div>
+
+<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Medicamentos em Uso</label>
+  <%= f.text_area :medications,
+      rows: 2,
+      placeholder: "Liste os medicamentos que você toma regularmente",
+      class: input_class %>
+</div>
+
+<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Lesões ou Limitações Físicas</label>
+  <%= f.text_area :injuries,
+      rows: 2,
+      placeholder: "Lesões antigas, dores crônicas, limitações de movimento, etc.",
+      class: input_class %>
+</div>
+
+<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Restrições Alimentares</label>
+  <%= f.text_area :dietary_restrictions,
+      rows: 2,
+      placeholder: "Alergias, intolerâncias, dietas específicas (vegetariano, vegano, etc.)",
+      class: input_class %>
+</div>
+
+<div>
+  <%= required_field_label("Horas de Sono por Noite", anamnese, :sleep_hours, f) %>
+  <%= f.number_field :sleep_hours,
+      required: true,
+      min: 1,
+      max: 24,
+      placeholder: "Ex: 7",
+      class: field_error_class(anamnese, :sleep_hours, base_class: input_class) %>
+  <%= field_error_message(anamnese, :sleep_hours) %>
+</div>
+
+<div>
+  <%= required_field_label("Nível de Estresse", anamnese, :stress_level, f) %>
+  <%= f.select :stress_level,
+      [
+        ['Baixo', 'low'],
+        ['Moderado', 'moderate'],
+        ['Alto', 'high']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :stress_level, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :stress_level) %>
+</div>
+
+<div>
+  <%= required_field_label("Fumante?", anamnese, :smoking, f) %>
+  <%= f.select :smoking,
+      [['Sim', true], ['Não', false]],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :smoking, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :smoking) %>
+</div>
+
+<div>
+  <%= required_field_label("Consumo de Álcool", anamnese, :alcohol_consumption, f) %>
+  <%= f.select :alcohol_consumption,
+      [
+        ['Não bebo', 'none'],
+        ['Ocasionalmente', 'occasionally'],
+        ['Socialmente', 'socially'],
+        ['Frequentemente', 'frequently']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :alcohol_consumption, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :alcohol_consumption) %>
+</div>
+
+<div class="md:col-span-2 border-t pt-6 mt-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Informações Adicionais</h3>
+</div>
+
+<div data-controller="input-formatter" data-input-type="cpf">
+  <%= required_field_label("CPF", anamnese, :cpf, f) %>
+  <%= f.text_field :cpf,
+      required: true,
+      placeholder: "000.000.000-00",
+      maxlength: 14,
+      class: field_error_class(anamnese, :cpf, base_class: input_class) %>
+  <%= field_error_message(anamnese, :cpf) %>
+</div>
+
+<div data-controller="input-formatter" data-input-type="phone">
+  <%= required_field_label("Telefone", anamnese, :phone, f) %>
+  <%= f.phone_field :phone,
+      required: true,
+      placeholder: "Ex: (11) 99999-9999",
+      class: field_error_class(anamnese, :phone, base_class: input_class) %>
+  <%= field_error_message(anamnese, :phone) %>
+</div>
+
+<div>
+  <label class="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento</label>
+  <%= f.date_field :birth_date,
+      class: input_class %>
+</div>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Endereço", anamnese, :address, f) %>
+  <%= f.text_field :address,
+      required: true,
+      placeholder: "Rua, número, bairro, cidade - UF",
+      class: field_error_class(anamnese, :address, base_class: input_class) %>
+  <%= field_error_message(anamnese, :address) %>
+</div>
+
+<div>
+  <label class="block text-sm font-medium text-gray-700 mb-2">Estado Civil</label>
+  <%= f.select :marital_status,
+      [
+        ['Solteiro(a)', 'single'],
+        ['Casado(a)', 'married'],
+        ['Divorciado(a)', 'divorced'],
+        ['Viúvo(a)', 'widowed']
+      ],
+      { prompt: 'Selecione...' },
+      class: input_class %>
+</div>
+
+<div>
+  <%= required_field_label("Profissão", anamnese, :profession, f) %>
+  <%= f.text_field :profession,
+      required: true,
+      placeholder: "Ex: Engenheiro, Professor, etc.",
+      class: field_error_class(anamnese, :profession, base_class: input_class) %>
+  <%= field_error_message(anamnese, :profession) %>
+</div>
+
+<div class="md:col-span-2">
+  <label class="block text-sm font-medium text-gray-700 mb-2">Expectativas com o Programa</label>
+  <%= f.text_area :expectations,
+      rows: 3,
+      placeholder: "O que você espera alcançar com este programa?",
+      class: input_class %>
+</div>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Personalidade / Como você se descreve?", anamnese, :personality, f) %>
+  <%= f.text_area :personality,
+      required: true,
+      rows: 2,
+      placeholder: "Ex: Sou uma pessoa motivada, gosto de desafios, etc.",
+      class: field_error_class(anamnese, :personality, base_class: input_class) %>
+  <%= field_error_message(anamnese, :personality) %>
+</div>
+
+<div class="md:col-span-2 border-t pt-6 mt-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Treino</h3>
+</div>
+
+<div>
+  <%= required_field_label("Disponibilidade para Treinar", anamnese, :training_availability, f) %>
+  <%= f.text_field :training_availability,
+      required: true,
+      placeholder: "Ex: Segunda a sexta, manhã e noite",
+      class: field_error_class(anamnese, :training_availability, base_class: input_class) %>
+  <%= field_error_message(anamnese, :training_availability) %>
+</div>
+
+<div>
+  <%= required_field_label("Local de Treino", anamnese, :training_location, f) %>
+  <%= f.select :training_location,
+      [
+        ['Academia', 'gym'],
+        ['Casa', 'home'],
+        ['Ar Livre', 'outdoor'],
+        ['Misto', 'mixed']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :training_location, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :training_location) %>
+</div>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Equipamentos Disponíveis", anamnese, :available_equipment, f) %>
+  <%= f.text_area :available_equipment,
+      required: true,
+      rows: 2,
+      placeholder: "Ex: Halteres, barra, elásticos, esteira, etc.",
+      class: field_error_class(anamnese, :available_equipment, base_class: input_class) %>
+  <%= field_error_message(anamnese, :available_equipment) %>
+</div>
+
+<div class="md:col-span-2 border-t pt-6 mt-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Digestão e Saúde Gastrointestinal</h3>
+</div>
+
+<div>
+  <%= required_field_label("Como é sua digestão?", anamnese, :digestion, f) %>
+  <%= f.select :digestion,
+      [
+        ['Boa', 'good'],
+        ['Regular', 'regular'],
+        ['Ruim', 'bad'],
+        ['Muito Ruim', 'very_bad']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :digestion, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :digestion) %>
+</div>
+
+<div>
+  <%= required_field_label("Como você mastiga?", anamnese, :chewing, f) %>
+  <%= f.select :chewing,
+      [
+        ['Devagar', 'slow'],
+        ['Normal', 'normal'],
+        ['Rápido', 'fast']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :chewing, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :chewing) %>
+</div>
+
+<div>
+  <%= required_field_label("Azia?", anamnese, :heartburn, f) %>
+  <%= f.select :heartburn,
+      [['Sim', true], ['Não', false]],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :heartburn, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :heartburn) %>
+</div>
+
+<div>
+  <%= required_field_label("Gastrite?", anamnese, :gastritis, f) %>
+  <%= f.select :gastritis,
+      [['Sim', true], ['Não', false]],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :gastritis, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :gastritis) %>
+</div>
+
+<div>
+  <%= required_field_label("Refluxo?", anamnese, :reflux, f) %>
+  <%= f.select :reflux,
+      [['Sim', true], ['Não', false]],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :reflux, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :reflux) %>
+</div>
+
+<div>
+  <%= required_field_label("Cor da Urina", anamnese, :urine_scale, f) %>
+  <%= f.select :urine_scale,
+      [
+        ['Clara/Transparente', 'clear'],
+        ['Amarelo Claro', 'light_yellow'],
+        ['Amarelo', 'yellow'],
+        ['Amarelo Escuro', 'dark_yellow'],
+        ['Âmbar', 'amber']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :urine_scale, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :urine_scale) %>
+</div>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Escala de Evacuação (Bristol)", anamnese, :bowel_movement_scale, f) %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+    <div>
+      <%= f.select :bowel_movement_scale,
+          [
+            ['Tipo 1 - Pedaços duros', 'type_1'],
+            ['Tipo 2 - Formato de salsicha grumosa', 'type_2'],
+            ['Tipo 3 - Salsicha com rachaduras', 'type_3'],
+            ['Tipo 4 - Salsicha lisa', 'type_4'],
+            ['Tipo 5 - Pedaços macios', 'type_5'],
+            ['Tipo 6 - Pedaços esfarelados', 'type_6'],
+            ['Tipo 7 - Líquida', 'type_7']
+          ],
+          { prompt: 'Selecione...' },
+          { required: true, class: field_error_class(anamnese, :bowel_movement_scale, base_class: input_class) } %>
+      <%= field_error_message(anamnese, :bowel_movement_scale) %>
+    </div>
+
+    <details class="text-sm">
+      <summary class="cursor-pointer text-cyan-600 hover:text-cyan-700 font-medium mb-2">
+        Ver guia da Escala de Bristol
+      </summary>
+      <div class="mt-3 p-4 bg-white border border-gray-300 rounded-lg">
+        <ol class="text-xs text-gray-700 space-y-1 list-decimal list-inside">
+          <li>Pedaços duros e separados, difíceis de evacuar</li>
+          <li>Formato de salsicha, com grumos</li>
+          <li>Formato de salsicha, com rachaduras na superfície</li>
+          <li>Formato de salsicha, liso e macio</li>
+          <li>Pedaços macios com bordas bem definidas</li>
+          <li>Pedaços macios e esfarrapados, com bordas irregulares</li>
+          <li>Totalmente líquido, sem pedaços sólidos</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div class="md:col-span-2 border-t pt-6 mt-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Rotina Alimentar</h3>
+</div>
+
+<div>
+  <%= required_field_label("Café da Manhã", anamnese, :breakfast, f) %>
+  <%= f.text_area :breakfast,
+      required: true,
+      rows: 2,
+      placeholder: "O que você costuma comer no café da manhã?",
+      class: field_error_class(anamnese, :breakfast, base_class: input_class) %>
+  <%= field_error_message(anamnese, :breakfast) %>
+</div>
+
+<div>
+  <%= required_field_label("Horário do Café da Manhã", anamnese, :breakfast_time, f) %>
+  <%= f.time_field :breakfast_time,
+      required: true,
+      class: field_error_class(anamnese, :breakfast_time, base_class: input_class) %>
+  <%= field_error_message(anamnese, :breakfast_time) %>
+</div>
+
+<div>
+  <%= required_field_label("Almoço", anamnese, :lunch, f) %>
+  <%= f.text_area :lunch,
+      required: true,
+      rows: 2,
+      placeholder: "O que você costuma comer no almoço?",
+      class: field_error_class(anamnese, :lunch, base_class: input_class) %>
+  <%= field_error_message(anamnese, :lunch) %>
+</div>
+
+<div>
+  <%= required_field_label("Horário do Almoço", anamnese, :lunch_time, f) %>
+  <%= f.time_field :lunch_time,
+      required: true,
+      class: field_error_class(anamnese, :lunch_time, base_class: input_class) %>
+  <%= field_error_message(anamnese, :lunch_time) %>
+</div>
+
+<div>
+  <%= required_field_label("Lanche da Tarde", anamnese, :afternoon_snack, f) %>
+  <%= f.text_area :afternoon_snack,
+      required: true,
+      rows: 2,
+      placeholder: "O que você costuma comer no lanche da tarde?",
+      class: field_error_class(anamnese, :afternoon_snack, base_class: input_class) %>
+  <%= field_error_message(anamnese, :afternoon_snack) %>
+</div>
+
+<div>
+  <%= required_field_label("Horário do Lanche da Tarde", anamnese, :afternoon_snack_time, f) %>
+  <%= f.time_field :afternoon_snack_time,
+      required: true,
+      class: field_error_class(anamnese, :afternoon_snack_time, base_class: input_class) %>
+  <%= field_error_message(anamnese, :afternoon_snack_time) %>
+</div>
+
+<div>
+  <%= required_field_label("Jantar", anamnese, :dinner, f) %>
+  <%= f.text_area :dinner,
+      required: true,
+      rows: 2,
+      placeholder: "O que você costuma comer no jantar?",
+      class: field_error_class(anamnese, :dinner, base_class: input_class) %>
+  <%= field_error_message(anamnese, :dinner) %>
+</div>
+
+<div>
+  <%= required_field_label("Horário do Jantar", anamnese, :dinner_time, f) %>
+  <%= f.time_field :dinner_time,
+      required: true,
+      class: field_error_class(anamnese, :dinner_time, base_class: input_class) %>
+  <%= field_error_message(anamnese, :dinner_time) %>
+</div>
+
+<div>
+  <%= required_field_label("Belisca durante o dia?", anamnese, :snacks_between_meals, f) %>
+  <%= f.select :snacks_between_meals,
+      [['Sim', true], ['Não', false]],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :snacks_between_meals, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :snacks_between_meals) %>
+</div>
+
+<div>
+  <%= required_field_label("Horário de Maior Apetite", anamnese, :time_of_biggest_appetite, f) %>
+  <%= f.select :time_of_biggest_appetite,
+      [
+        ['Manhã', 'morning'],
+        ['Tarde', 'afternoon'],
+        ['Noite', 'night'],
+        ['Madrugada', 'late_night']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :time_of_biggest_appetite, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :time_of_biggest_appetite) %>
+</div>
+
+<fieldset class="md:col-span-2">
+  <legend class="block text-sm font-medium text-gray-700 mb-2">
+    O que te motiva a comer? <span class="text-gray-700">*</span>
+  </legend>
+  <div class="space-y-2 p-4 border border-gray-300 rounded-lg bg-gray-50">
+    <% eating_motivations = [
+      'Estresse',
+      'Ansiedade',
+      'Tédio',
+      'Cansaço',
+      'Emoções negativas (tristeza, raiva, frustração)',
+      'Fome física real',
+      'Hábito/rotina',
+      'Convívio social',
+      'Recompensa/celebração',
+      'Procrastinação'
+    ] %>
+    <% selected_values = (anamnese.eating_motivation || '').split('|||').reject(&:blank?) %>
+    <% eating_motivations.each_with_index do |motivation, index| %>
+      <div class="flex items-center">
+        <%= check_box_tag 'user[anamnese_attributes][eating_motivation][]', motivation, selected_values.include?(motivation),
+            id: "eating_motivation_#{index}",
+            class: "h-4 w-4 text-cyan-500 focus:ring-cyan-400 border-gray-300 rounded" %>
+        <%= label_tag "eating_motivation_#{index}", motivation,
+            class: "ml-2 text-sm text-gray-700" %>
+      </div>
+    <% end %>
+
+    <div class="flex items-start pt-2 border-t border-gray-200">
+      <%= check_box_tag 'eating_motivation_other_checkbox', '1', selected_values.any? { |v| !eating_motivations.include?(v) },
+          id: 'eating_motivation_other_checkbox',
+          class: "h-4 w-4 text-cyan-500 focus:ring-cyan-400 border-gray-300 rounded mt-1" %>
+      <div class="ml-2 flex-1">
+        <%= label_tag 'eating_motivation_other_checkbox', 'Outro:', class: "text-sm text-gray-700 block mb-1" %>
+        <%= text_field_tag 'user[anamnese_attributes][eating_motivation_other]',
+            selected_values.find { |v| !eating_motivations.include?(v) },
+            placeholder: "Especifique...",
+            id: 'eating_motivation_other_field',
+            class: "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition-all" %>
+      </div>
+    </div>
+  </div>
+  <%= field_error_message(anamnese, :eating_motivation) %>
+</fieldset>
+
+<div class="md:col-span-2">
+  <%= required_field_label("Satisfeito com suas refeições?", anamnese, :satisfied_with_meals, f) %>
+  <%= f.select :satisfied_with_meals,
+      [
+        ['Sim, muito satisfeito', 'very_satisfied'],
+        ['Sim, satisfeito', 'satisfied'],
+        ['Mais ou menos', 'neutral'],
+        ['Não muito satisfeito', 'unsatisfied'],
+        ['Nada satisfeito', 'very_unsatisfied']
+      ],
+      { prompt: 'Selecione...' },
+      { required: true, class: field_error_class(anamnese, :satisfied_with_meals, base_class: input_class) } %>
+  <%= field_error_message(anamnese, :satisfied_with_meals) %>
+</div>
+
+<div class="md:col-span-2 border-t pt-6 mt-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Rotina de Sono</h3>
+</div>
+
+<div>
+  <%= required_field_label("Horário que Acorda", anamnese, :wake_up_time, f) %>
+  <%= f.time_field :wake_up_time,
+      required: true,
+      class: field_error_class(anamnese, :wake_up_time, base_class: input_class) %>
+  <%= field_error_message(anamnese, :wake_up_time) %>
+</div>
+
+<div>
+  <%= required_field_label("Horário que Dorme", anamnese, :sleep_time, f) %>
+  <%= f.time_field :sleep_time,
+      required: true,
+      class: field_error_class(anamnese, :sleep_time, base_class: input_class) %>
+  <%= field_error_message(anamnese, :sleep_time) %>
+</div>

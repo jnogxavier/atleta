@@ -1,0 +1,491 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-4xl mx-auto p-2 sm:p-4 lg:p-6">
+    
+    <div class="mb-6">
+      <div class="flex items-center gap-4 mb-4">
+        <%= link_to admin_dashboard_path, class: "text-gray-600 hover:text-gray-900" do %>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        <% end %>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Detalhes do Cadastro</h1>
+          <p class="text-gray-600 mt-1">Informações fornecidas durante o cadastro</p>
+        </div>
+      </div>
+    </div>
+
+    <% if @user.nil? %>
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+        <p class="text-yellow-800">Informações detalhadas não encontradas. O cadastro pode ter sido iniciado mas não finalizado.</p>
+      </div>
+    <% else %>
+      <% anamnese = @user.anamnese || @user.build_anamnese %>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Dados Pessoais</h3>
+
+        <div class="space-y-4">
+          <div>
+            <%= label_tag 'name', 'Nome Completo', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_field_tag 'name', @registration.name, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'gender', 'Sexo', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'gender',
+                  options_for_select([['Masculino', 'male'], ['Feminino', 'female']], anamnese.gender),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'age', 'Idade', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= number_field_tag 'age', anamnese.age, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'height', 'Altura (cm)', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= number_field_tag 'height', anamnese.height, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'weight', 'Peso (kg)', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= number_field_tag 'weight', anamnese.weight, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'cpf', 'CPF', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_field_tag 'cpf', anamnese.cpf, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'phone', 'Telefone', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= phone_field_tag 'phone', anamnese.phone, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'birth_date', 'Data de Nascimento', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= date_field_tag 'birth_date', anamnese.birth_date, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'marital_status', 'Estado Civil', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'marital_status',
+                  options_for_select([
+                    ['Solteiro(a)', 'single'],
+                    ['Casado(a)', 'married'],
+                    ['Divorciado(a)', 'divorced'],
+                    ['Viúvo(a)', 'widowed']
+                  ], anamnese.marital_status),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+          </div>
+
+          <div>
+            <%= label_tag 'address', 'Endereço', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_field_tag 'address', anamnese.address, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'profession', 'Profissão', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_field_tag 'profession', anamnese.profession, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div>
+            <%= label_tag 'personality', 'Personalidade / Como você se descreve?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'personality', anamnese.personality, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Objetivos e Atividade Física</h3>
+
+        <div class="space-y-4">
+          <div>
+            <%= label_tag 'goal', 'Objetivo Principal', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= select_tag 'goal',
+                options_for_select([
+                  ['Emagrecimento', 'weight_loss'],
+                  ['Ganho de Massa Muscular', 'muscle_gain'],
+                  ['Melhora do Condicionamento', 'fitness'],
+                  ['Reabilitação', 'rehabilitation'],
+                  ['Saúde Geral', 'general_health']
+                ], anamnese.goal),
+                { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+          </div>
+
+          <div>
+            <%= label_tag 'physical_activity_level', 'Nível de Atividade Física', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= select_tag 'physical_activity_level',
+                options_for_select([
+                  ['Sedentário', 'sedentary'],
+                  ['Levemente Ativo (1-3x por semana)', 'lightly_active'],
+                  ['Moderadamente Ativo (3-5x por semana)', 'moderately_active'],
+                  ['Muito Ativo (6-7x por semana)', 'very_active'],
+                  ['Atleta', 'athlete']
+                ], anamnese.physical_activity_level),
+                { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+          </div>
+
+          <div>
+            <%= label_tag 'expectations', 'Expectativas com o Programa', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'expectations', anamnese.expectations, rows: 3, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'training_availability', 'Disponibilidade para Treinar', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_field_tag 'training_availability', anamnese.training_availability, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'training_location', 'Local de Treino', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'training_location',
+                  options_for_select([
+                    ['Academia', 'gym'],
+                    ['Casa', 'home'],
+                    ['Ar Livre', 'outdoor'],
+                    ['Misto', 'mixed']
+                  ], anamnese.training_location),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+          </div>
+
+          <div>
+            <%= label_tag 'available_equipment', 'Equipamentos Disponíveis', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'available_equipment', anamnese.available_equipment, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Informações de Saúde</h3>
+
+        <div class="space-y-4">
+          <div>
+            <%= label_tag 'health_conditions', 'Condições de Saúde', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'health_conditions', anamnese.health_conditions, rows: 3, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div>
+            <%= label_tag 'medications', 'Medicamentos em Uso', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'medications', anamnese.medications, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div>
+            <%= label_tag 'injuries', 'Lesões ou Limitações Físicas', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'injuries', anamnese.injuries, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div>
+            <%= label_tag 'dietary_restrictions', 'Restrições Alimentares', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'dietary_restrictions', anamnese.dietary_restrictions, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <%= label_tag 'smoking', 'Fumante?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'smoking',
+                  options_for_select([['Sim', true], ['Não', false]], anamnese.smoking),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'alcohol_consumption', 'Consumo de Álcool', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'alcohol_consumption',
+                  options_for_select([
+                    ['Não bebo', 'none'],
+                    ['Ocasionalmente', 'occasionally'],
+                    ['Socialmente', 'socially'],
+                    ['Frequentemente', 'frequently']
+                  ], anamnese.alcohol_consumption),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'sleep_hours', 'Horas de Sono', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= number_field_tag 'sleep_hours', anamnese.sleep_hours, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div>
+            <%= label_tag 'stress_level', 'Nível de Estresse', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= select_tag 'stress_level',
+                options_for_select([
+                  ['Baixo', 'low'],
+                  ['Moderado', 'moderate'],
+                  ['Alto', 'high']
+                ], anamnese.stress_level),
+                { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Digestão e Saúde Gastrointestinal</h3>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'digestion', 'Como é sua digestão?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'digestion',
+                  options_for_select([
+                    ['Boa', 'good'],
+                    ['Regular', 'regular'],
+                    ['Ruim', 'bad'],
+                    ['Muito Ruim', 'very_bad']
+                  ], anamnese.digestion),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'chewing', 'Como você mastiga?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'chewing',
+                  options_for_select([
+                    ['Devagar', 'slow'],
+                    ['Normal', 'normal'],
+                    ['Rápido', 'fast']
+                  ], anamnese.chewing),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <%= label_tag 'heartburn', 'Azia?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'heartburn',
+                  options_for_select([['Sim', true], ['Não', false]], anamnese.heartburn),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'gastritis', 'Gastrite?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'gastritis',
+                  options_for_select([['Sim', true], ['Não', false]], anamnese.gastritis),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'reflux', 'Refluxo?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'reflux',
+                  options_for_select([['Sim', true], ['Não', false]], anamnese.reflux),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'bowel_movement_scale', 'Escala de Evacuação (Bristol)', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'bowel_movement_scale',
+                  options_for_select([
+                    ['Tipo 1 - Pedaços duros', 'type_1'],
+                    ['Tipo 2 - Formato de salsicha grumosa', 'type_2'],
+                    ['Tipo 3 - Salsicha com rachaduras', 'type_3'],
+                    ['Tipo 4 - Salsicha lisa', 'type_4'],
+                    ['Tipo 5 - Pedaços macios', 'type_5'],
+                    ['Tipo 6 - Pedaços esfarelados', 'type_6'],
+                    ['Tipo 7 - Líquida', 'type_7']
+                  ], anamnese.bowel_movement_scale),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'urine_scale', 'Cor da Urina', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'urine_scale',
+                  options_for_select([
+                    ['Clara/Transparente', 'clear'],
+                    ['Amarelo Claro', 'light_yellow'],
+                    ['Amarelo', 'yellow'],
+                    ['Amarelo Escuro', 'dark_yellow'],
+                    ['Âmbar', 'amber']
+                  ], anamnese.urine_scale),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Rotina Alimentar</h3>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'breakfast', 'Café da Manhã', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_area_tag 'breakfast', anamnese.breakfast, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'breakfast_time', 'Horário do Café da Manhã', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= time_field_tag 'breakfast_time', anamnese.breakfast_time, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'lunch', 'Almoço', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_area_tag 'lunch', anamnese.lunch, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'lunch_time', 'Horário do Almoço', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= time_field_tag 'lunch_time', anamnese.lunch_time, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'afternoon_snack', 'Lanche da Tarde', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_area_tag 'afternoon_snack', anamnese.afternoon_snack, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'afternoon_snack_time', 'Horário do Lanche da Tarde', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= time_field_tag 'afternoon_snack_time', anamnese.afternoon_snack_time, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'dinner', 'Jantar', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= text_area_tag 'dinner', anamnese.dinner, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'dinner_time', 'Horário do Jantar', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= time_field_tag 'dinner_time', anamnese.dinner_time, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'snacks_between_meals', 'Belisca durante o dia?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'snacks_between_meals',
+                  options_for_select([['Sim', true], ['Não', false]], anamnese.snacks_between_meals),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+
+            <div>
+              <%= label_tag 'time_of_biggest_appetite', 'Horário de Maior Apetite', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= select_tag 'time_of_biggest_appetite',
+                  options_for_select([
+                    ['Manhã', 'morning'],
+                    ['Tarde', 'afternoon'],
+                    ['Noite', 'night'],
+                    ['Madrugada', 'late_night']
+                  ], anamnese.time_of_biggest_appetite),
+                  { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+            </div>
+          </div>
+
+          <div>
+            <%= label_tag 'eating_motivation', 'O que te motiva a comer?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= text_area_tag 'eating_motivation', anamnese.eating_motivation, rows: 2, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+          </div>
+
+          <div>
+            <%= label_tag 'satisfied_with_meals', 'Satisfeito com suas refeições?', class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= select_tag 'satisfied_with_meals',
+                options_for_select([
+                  ['Sim, muito satisfeito', 'very_satisfied'],
+                  ['Sim, satisfeito', 'satisfied'],
+                  ['Mais ou menos', 'neutral'],
+                  ['Não muito satisfeito', 'unsatisfied'],
+                  ['Nada satisfeito', 'very_unsatisfied']
+                ], anamnese.satisfied_with_meals),
+                { prompt: 'Não informado', class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true } %>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Rotina de Sono</h3>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= label_tag 'wake_up_time', 'Horário que Acorda', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= time_field_tag 'wake_up_time', anamnese.wake_up_time, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+
+            <div>
+              <%= label_tag 'sleep_time', 'Horário que Dorme', class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= time_field_tag 'sleep_time', anamnese.sleep_time, class: "w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Descrição da Rotina</h2>
+
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-3">Gravação de Áudio</h3>
+          <% if @user.audio_recording&.file&.attached? %>
+            <p class="text-sm text-gray-600 mb-3">Gravação da descrição de rotina do aluno</p>
+            <div class="flex items-center gap-4">
+              <audio controls class="flex-1 h-10">
+                <source src="<%= url_for(@user.audio_recording.file) %>" type="audio/webm">
+                Seu navegador não suporta o elemento de áudio.
+              </audio>
+            </div>
+          <% else %>
+            <p class="text-sm text-gray-500 italic">Nenhuma gravação de áudio fornecida.</p>
+          <% end %>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 mb-3">Descrição em Texto</h3>
+          <%= text_area_tag 'routine_description', anamnese.routine_description, rows: 4, class: "w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50", disabled: true %>
+        </div>
+      </div>
+
+
+      <% if @user.evaluation_media.any? %>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Fotos de Avaliação</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <% @user.evaluation_media.each do |media| %>
+              <div class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                <% if media.file.attached? %>
+                  <%= image_tag media.file, class: "w-full h-full object-cover" %>
+                <% end %>
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2">
+                  <%= media.category %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      
+      <div class="flex gap-4">
+        <%= button_to "Aprovar Cadastro", approve_admin_pending_registration_path(@registration), method: :post,
+            data: { confirm: "Deseja aprovar o cadastro de #{@registration.name}?" },
+            class: "px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors" %>
+
+        <%= link_to "Rejeitar", admin_dashboard_path(show_reject: @registration.id),
+            class: "px-6 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors" %>
+      </div>
+    <% end %>
+  </div>
+</div>

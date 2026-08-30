@@ -1,0 +1,80 @@
+<% has_existing_audio = user&.audio_recording&.file&.attached? %>
+
+<div class="mb-6" data-controller="audio-recorder">
+  <h3 class="text-lg font-semibold text-gray-700 mb-3">Gravação de Áudio</h3>
+  <% if has_existing_audio %>
+    <p class="text-sm text-gray-600 mb-3">Gravação da descrição de rotina do aluno</p>
+    <div class="flex items-center gap-4">
+      <audio controls class="flex-1 h-10">
+        <source src="<%= url_for(user.audio_recording.file) %>" type="audio/webm">
+        Seu navegador não suporta o elemento de áudio.
+      </audio>
+    </div>
+  <% else %>
+    <div class="space-y-3">
+      <div id="recording-controls" class="flex gap-3">
+        <button type="button"
+                data-action="click->audio-recorder#startRecording"
+                data-audio-recorder-target="startButton"
+                class="px-4 py-2 bg-cyan-500 text-white font-semibold rounded-lg hover:bg-cyan-600 transition-colors cursor-pointer flex items-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM9 7a1 1 0 1 0 2 0v3.5a1 1 0 1 0-2 0V7zm1 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+          </svg>
+          <span>Iniciar Gravação</span>
+        </button>
+
+        <button type="button"
+                data-action="click->audio-recorder#stopRecording"
+                data-audio-recorder-target="stopButton"
+                class="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors cursor-pointer hidden flex items-center gap-2"
+                id="stop-button">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M5 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4z"/>
+          </svg>
+          <span>Parar Gravação</span>
+        </button>
+      </div>
+
+      <div data-audio-recorder-target="recordingStatus"
+           class="hidden p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
+        <div class="flex-1">
+          <p class="text-sm font-medium text-blue-900">Gravando...</p>
+        </div>
+        <div class="text-lg font-mono font-semibold text-blue-600"
+             data-audio-recorder-target="timer">00:00</div>
+      </div>
+
+      <div data-audio-recorder-target="playback" class="hidden">
+        <p class="text-sm text-gray-600 mb-3">Gravação da descrição de rotina</p>
+        <div class="flex items-center gap-4">
+          <audio controls class="flex-1 h-10">
+            <source src="" data-audio-recorder-target="audioSource" type="audio/webm">
+            Seu navegador não suporta o elemento de áudio.
+          </audio>
+        </div>
+
+        <div class="mt-3">
+          <button type="button"
+                  data-action="click->audio-recorder#deleteRecording"
+                  class="px-3 py-1 text-sm bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300 transition-colors">
+            Descartar
+          </button>
+        </div>
+      </div>
+
+      <audio data-audio-recorder-target="audioElement" class="hidden"></audio>
+
+      <!-- Hidden file input for saving recorded audio -->
+      <%= f.file_field :audio_file, accept: "audio/*", class: "hidden", id: "audio_file_input", data: { "audio-recorder-target": "audioInput" } %>
+    </div>
+  <% end %>
+</div>
+
+<div>
+  <h3 class="text-lg font-semibold text-gray-700 mb-3">Descrição em Texto</h3>
+  <%= f.text_area :routine_description,
+        rows: 4,
+        value: anamnese&.routine_description,
+        placeholder: "Descreva sua rotina diária, horários, atividades, etc. (Deixe em branco se preferir gravar um áudio)",
+        class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 outline-none transition-all" %>
+</div>

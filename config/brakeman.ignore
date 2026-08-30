@@ -1,0 +1,38 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "87272686193584b63141784a91171c2f0e246c0e6f5f26591f6cf5bc493616dc",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/admin/videos/index.html.erb",
+      "line": 18,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"Ver Vídeo\", Video.new.safe_url, :target => \"_blank\", :rel => \"noopener noreferrer\", :class => \"text-cyan-500 hover:text-cyan-600\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::VideosController",
+          "method": "index",
+          "line": 45,
+          "file": "app/controllers/admin/videos_controller.rb",
+          "rendered": {
+            "name": "admin/videos/index",
+            "file": "app/views/admin/videos/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/videos/index"
+      },
+      "user_input": "Video.new.safe_url",
+      "confidence": "Weak",
+      "cwe_id": [ 79 ],
+      "note": "URL is validated in Video model with format validator and sanitized via safe_url method that only allows http/https schemes"
+    }
+  ],
+  "updated": "2025-11-06 13:06:19 +0000",
+  "brakeman_version": "7.1.1"
+}
